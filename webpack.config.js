@@ -55,7 +55,18 @@ Encore
         config.corejs = 3;
     })
 
-    // enables Sass/SCSS support
+    .copyFiles({
+        from: './assets/img',
+        // optional target path, relative to the output dir
+        //to: 'images/[path][name].[ext]',
+        // if versioning is enabled, add the file hash too
+        to: 'images/[path][name].[hash:8].[ext]',
+        pattern: /\.(png|jpg|jpeg|svg)$/
+        // only copy files matching this pattern
+    })
+
+
+// enables Sass/SCSS support
     //.enableSassLoader()
 
     // uncomment if you use TypeScript
