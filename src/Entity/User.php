@@ -76,6 +76,12 @@ class User implements UserInterface
      */
     private $activities;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+
     public function __construct()
     {
         $this->activitiesOwned = new ArrayCollection();
@@ -83,6 +89,7 @@ class User implements UserInterface
         // by default new user is not a admin and is active
         $this->setAdmin(false);
         $this->setActive(true);
+        //$this->setRoles(['ROLE_USER']);
     }
 
     public function getId(): ?int
@@ -252,9 +259,21 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles() : array
     {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
 
+        return array_unique($roles);
+
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     public function getSalt()
