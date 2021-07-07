@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ActivityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,8 +10,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'main_index')]
-    public function index(): Response
+    public function index(ActivityRepository $ar): Response
     {
-        return $this->render('main/index.html.twig');
+        $activities = $ar->findAll();
+
+        return $this->render('main/index.html.twig',
+        [
+             'activities' => $activities
+        ]);
     }
 }
