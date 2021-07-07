@@ -70,9 +70,7 @@ class AppFixtures extends Fixture
         $password3 = $this->encoder->encodePassword($user3, 'password3');
         $user3->setPassword($password3);
 
-        $manager->persist($user1);
-        $manager->persist($user2);
-        $manager->persist($user3);
+        //persist() is done after activities' one because of manyToMany relation
 
         //_____________________________________________
 
@@ -109,8 +107,16 @@ class AppFixtures extends Fixture
             ->setLongitude(9.014714)
             ->setCity($city2);
 
+        $location3 = new Location();
+        $location3->setName('location3')
+            ->setStreet('33 ru3')
+            ->setLatitude(1.052520)
+            ->setLongitude(2.360548)
+            ->setCity($city3);
+
         $manager->persist($location1);
         $manager->persist($location2);
+        $manager->persist($location3);
         //_____________________________________________
 
 
@@ -144,10 +150,10 @@ class AppFixtures extends Fixture
         //Fixtures for entity Activity
         //_____________________________________________
         $activity1 = new Activity();
-
         $activity1->setLocation($location1)
             ->setCampus($campus1)
             ->setUserOwner($user1)
+            ->addUser($user2)
             ->setState($state1)
             ->setName('activity1')
             ->setStartDateTime(new \DateTime('2021-07-14'))
@@ -156,7 +162,88 @@ class AppFixtures extends Fixture
             ->setMaxInscriptionsNb(10)
             ->setActivityInfo('Sortie du 14 juillet');
 
+        $activity2 = new Activity();
+        $activity2->setLocation($location2)
+            ->setCampus($campus2)
+            ->setUserOwner($user2)
+            ->addUser($user1)->addUser($user3)
+            ->setState($state1)
+            ->setName('activity2')
+            ->setStartDateTime(new \DateTime('2021-09-04'))
+            ->setDuration(5)
+            ->setInscriptionLimitDate(new \DateTime('2021-09-04'))
+            ->setMaxInscriptionsNb(25)
+            ->setActivityInfo('Pot de rentrée');
+
+        $activity3 = new Activity();
+        $activity3->setLocation($location3)
+            ->setCampus($campus3)
+            ->setUserOwner($user3)
+            //No addUser()
+            ->setState($state1)
+            ->setName('activity3')
+            ->setStartDateTime(new \DateTime('2021-12-25'))
+            ->setDuration(6)
+            ->setInscriptionLimitDate(new \DateTime('2021-12-15'))
+            ->setMaxInscriptionsNb(15)
+            ->setActivityInfo('Repas de noël');
+
+        $activity4 = new Activity();
+        $activity4->setLocation($location1)
+            ->setCampus($campus1)
+            ->setUserOwner($user1)
+            ->addUser($user2)->addUser($user3)
+            ->setState($state1)
+            ->setName('activity4')
+            ->setStartDateTime(new \DateTime('2021-07-28'))
+            ->setDuration(4)
+            ->setInscriptionLimitDate(new \DateTime('2021-07-17'))
+            ->setMaxInscriptionsNb(20)
+            ->setActivityInfo('Promenade en fôret');
+
+        $activity5 = new Activity();
+        $activity5->setLocation($location1)
+            ->setCampus($campus1)
+            ->setUserOwner($user3)
+            ->addUser($user1)
+            ->setState($state1)
+            ->setName('activity5')
+            ->setStartDateTime(new \DateTime('2021-08-08'))
+            ->setDuration(2)
+            ->setInscriptionLimitDate(new \DateTime('2021-08-08'))
+            ->setMaxInscriptionsNb(6)
+            ->setActivityInfo('Aqua-poney à la piscine');
+
+        $activity6 = new Activity();
+        $activity6->setLocation($location1)
+            ->setCampus($campus3)
+            ->setUserOwner($user3)
+            ->addUser($user1)->addUser($user2)
+            ->setState($state1)
+            ->setName('activity6')
+            ->setStartDateTime(new \DateTime('2021-10-01'))
+            ->setDuration(3)
+            ->setInscriptionLimitDate(new \DateTime('2021-10-01'))
+            ->setMaxInscriptionsNb(12)
+            ->setActivityInfo('Cinéma');
+
+                //Adding activities to users
+                //___________________
+                $user1->addActivity($activity2)->addActivity($activity5)->addActivity($activity5);
+                $user2->addActivity($activity1)->addActivity($activity4)->addActivity($activity6);
+                $user3->addActivity($activity2)->addActivity($activity4);
+
+                $manager->persist($user1);
+                $manager->persist($user2);
+                $manager->persist($user3);
+                //___________________
+
         $manager->persist($activity1);
+        $manager->persist($activity2);
+        $manager->persist($activity3);
+        $manager->persist($activity4);
+        $manager->persist($activity5);
+        $manager->persist($activity6);
         //_____________________________________________
 
 
