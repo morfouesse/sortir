@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
+use App\Service\SearchData;
 use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,4 +49,77 @@ class ActivityRepository extends ServiceEntityRepository
         ;
     }
     */
+    /* public function findSearch(SearchData $data)
+     {
+         $query = $this->getSearchQuery(data)->getQuery();
+     }*/
+
+    /**
+     * request of dql for the filter
+     * @param SearchData $data
+     * @return array
+     */
+    public function findSearch(SearchData $data): array
+    {
+        $query = $this
+            ->createQueryBuilder('a')
+            ->select('a,c')
+            ->join('a.campus', 'c');
+        if (!empty($data->q)) {
+            $query = $query
+                ->andWhere('a.name LIKE :q')
+                ->setParameter('q', "%{$data->q}%");
+
+        }
+        if (!empty($data->campuses)) {
+            $query = $query
+                //probleme prend la premiere val par default
+                ->andWhere('c.id IN (:campus)')
+                ->setParameter('campus', $data->campuses);
+        }
+        if (!empty($data->startDate)) {
+            $query = $query
+                //TODO:probleme prend la premiere val par default
+                ->andWhere('c.id IN (:campus)')
+                ->setParameter('campus', $data->campuses);
+        }
+
+        if (!empty($data->startDate)) {
+            $query = $query
+                ->andWhere('a.startDateTime >=:startDate')
+                ->setParameter('startDate', $data->startDate);
+        }
+        if (!empty($data->lastDate)) {
+            $query = $query
+                ->andWhere('a.startDateTime <=:lastDate')
+                ->setParameter('lastDate', $data->lastDate);
+        }
+
+
+        if(!empty(($data->userOwnActivities))){
+            $query = $query
+                ->andWhere('a.userOwner.id =: userOwner')
+                ->setParameter('userOwner', $this->getUser()->getId());
+        }
+
+        if(!empty(($data->usersActivities))){
+            $query = $query
+                ->andWhere('a.users.id =:usersActivities')
+                ->setParameter('usersActivities', $data->usersActivities);
+        }
+
+        if(!empty(($data->userNotActivities))){
+            $query = $query
+                ->andWhere('a.users.id !=:lastDate')
+                ->setParameter('userNotActivities', $data->userNotActivities);
+        }
+
+        if(!empty(($data->pastActivities))){
+            $query = $query
+                ->andWhere('a. =:pastActivities')
+                ->setParameter('pastActivities', $data->pastActivities);
+        }
+
+        return $query->getQuery()->getResult();
+    }
 }

@@ -116,4 +116,10 @@ class Campus
 
         return $this;
     }
+
+    public function __toString()
+    {   // the Campus objects are converted into a string of
+        // characters using the __toString() magic method
+        return $this->name;
+    }
 }
