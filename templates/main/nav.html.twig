@@ -17,12 +17,14 @@
                 Accueil
             </a>
 
-            <a class="navbar-item">
+    {% if app.user %}
+            <a class="navbar-item" href="{{ path('profile_myProfile') }}">
                 Mon profil
             </a>
+    {% endif %}
 
         </div>
-
+        {% if app.user %}
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
@@ -32,5 +34,6 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </nav>

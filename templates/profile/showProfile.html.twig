@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} | {{ user.username }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ user.username }}</h1>
+    <div>Prénom : {{ user.firstName }}</div>
+    <div>Nom : {{ user.name }}</div>
+    <div>Téléphone : {{ user.phone }}</div>
+    <div>Email : {{ user.email }}</div>
+    <div>Campus : {{ user.campus.name }}</div>
+
+    <div>
+        <a href="{{ path('main_index') }}">Retour</a>
+    </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
