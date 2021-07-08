@@ -17,20 +17,23 @@
                 Accueil
             </a>
 
-            <a class="navbar-item">
+    {% if app.user %}
+            <a class="navbar-item" href="{{ path('profile_myProfile') }}">
                 Mon profil
             </a>
+    {% endif %}
 
         </div>
-
+        {% if app.user %}
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
-                    <a class="button is-light">
+                    <a class="button is-light" href="{{ path('app_logout') }}" title="Logout">
                         Se déconnecter
                     </a>
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </nav>

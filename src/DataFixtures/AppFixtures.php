@@ -8,13 +8,16 @@ use App\Entity\City;
 use App\Entity\Location;
 use App\Entity\State;
 use App\Entity\User;
+use App\Repository\CityRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
-    private $encoder;
+    private UserPasswordEncoderInterface $encoder;
+
+
 
     public function __construct(UserPasswordEncoderInterface $encoder){
         $this->encoder = $encoder;
@@ -22,6 +25,11 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+
+        //
+        //
+        //$tab_cities = $manager->getRepository(CityRepository::class)->findAll();
+
 
         //Fixtures for entity Campus
         //_____________________________________________
