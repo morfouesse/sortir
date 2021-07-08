@@ -7,6 +7,10 @@
     {{ form_start(editProfileForm) }}
     {{ form_widget(editProfileForm) }}
 
+    <div>
+        <a href="{{ path('profile_changePassword') }}">Modifier le mot de passe</a>
+    </div>
+
     <button>Valider</button>
     {{ form_end(editProfileForm) }}
 {% endblock %}

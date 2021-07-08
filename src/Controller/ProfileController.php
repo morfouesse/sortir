@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ProfileController extends AbstractController
 {
@@ -76,14 +75,14 @@ class ProfileController extends AbstractController
 
                 $encodedPassword = $encoder->encodePassword($this->getUser(), $data['newPassword']);
                 $this->getUser()->setPassword($encodedPassword);
+                $this->getDoctrine()->getManager()->persist($this->getUser());
+                $this->getDoctrine()->getManager()->flush();
                 $this->getDoctrine()->getManager()->refresh($this->getUser());
-//                $this->getDoctrine()->getManager()->persist($this->getUser());
-//                $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('profile_myProfile');
-            } else {
+            } //else {
 //              throw new AuthenticationException('Mot de passe courant incorrect');
 
-            }
+//            }
 
         }
 
