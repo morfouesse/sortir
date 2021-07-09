@@ -56,6 +56,7 @@ class AppFixtures extends Fixture
         $this->fixCities($manager);
         $this->fixlocations($manager);
         $this->fixStates($manager);
+        $this->fixTestUser($manager);
         $this->fixUsers($manager);
         $this->fixActivities($manager);
         $this->fixUsersActivities($manager);
@@ -202,6 +203,40 @@ class AppFixtures extends Fixture
             }
             $manager->persist($activity);
         }
+        $manager->flush();
+    }
+
+    private function fixTestUser(ObjectManager $manager){
+        $campus = $this->campusRepository->findOneBy(['name' => 'Chartres de Bretagne']);
+        $martin = new User();
+        $passwordMartin = $this->encoder->encodePassword($martin, 'martin');
+        $martin->setUsername('martin')
+            ->setName('Fléchard')
+            ->setFirstName('Martin')
+            ->setPhone('0614586523')
+            ->setEmail('martin.flechard2021@campus-eni.fr')
+            ->setRoles(['ROLE_USER'])
+            ->setPassword($passwordMartin)
+            ->setCampus($campus)
+            ->setActive(true)
+            ->setAdmin(false);
+        $antoine = new User();
+        $passwordAntoine = $this->encoder->encodePassword($martin, 'password');
+        $antoine->setUsername('antoine')
+            ->setName('Morfouesse')
+            ->setFirstName('Antoine')
+            ->setPhone('0647586932')
+            ->setEmail('antoine.morfouesse2021@campus-eni.fr')
+            ->setRoles(['ROLE_USER'])
+            ->setPassword($passwordAntoine)
+            ->setCampus($campus)
+            ->setActive(true)
+            ->setAdmin(false);
+        $campus->addUser($martin);
+        $manager->persist($martin);
+        $campus->addUser($antoine);
+        $manager->persist($antoine);
+        $manager->persist($campus);
         $manager->flush();
     }
 
