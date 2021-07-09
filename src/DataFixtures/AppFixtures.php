@@ -8,31 +8,62 @@ use App\Entity\City;
 use App\Entity\Location;
 use App\Entity\State;
 use App\Entity\User;
+use App\Repository\ActivityRepository;
+use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
+use App\Repository\LocationRepository;
+use App\Repository\StateRepository;
+use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
     private UserPasswordEncoderInterface $encoder;
+    private EntityRepository $campusRepository;
+    private EntityRepository $cityRepository;
+    private EntityRepository $locationRepository;
+    private EntityRepository $stateRepository;
+    private EntityRepository $userRepository;
+    private EntityRepository $activityRepository;
+
+    private const NB_CITIES = 20;
+    private const NB_LOCATIONS = 30;
+    private const NB_USERS = 50;
+    private const NB_ACTIVITIES = 50;
+    private const MAX_ACTIVITIES_PER_USER = 6;
 
 
-
-    public function __construct(UserPasswordEncoderInterface $encoder){
+    public function __construct(UserPasswordEncoderInterface $encoder, CampusRepository $campusRepository,
+                                CityRepository $cityRepository, LocationRepository $locationRepository,
+                                StateRepository $stateRepository, UserRepository $userRepository,
+                                ActivityRepository $activityRepository){
         $this->encoder = $encoder;
+        $this->campusRepository = $campusRepository;
+        $this->cityRepository = $cityRepository;
+        $this->locationRepository = $locationRepository;
+        $this->stateRepository = $stateRepository;
+        $this->userRepository = $userRepository;
+        $this->activityRepository = $activityRepository;
     }
 
     public function load(ObjectManager $manager)
     {
+        $this->fixCampuses($manager);
+        $this->fixCities($manager);
+        $this->fixlocations($manager);
+        $this->fixStates($manager);
+        $this->fixTestUser($manager);
+        $this->fixUsers($manager);
+        $this->fixActivities($manager);
+        $this->fixUsersActivities($manager);
 
-        //
-        //
-        //$tab_cities = $manager->getRepository(CityRepository::class)->findAll();
+    }
 
-
-        //Fixtures for entity Campus
-        //_____________________________________________
+    private function fixCampuses(ObjectManager $manager){
         $campus1 = new Campus();
         $campus1->setName('Saint-Herblain');
         $campus2 = new Campus();
@@ -43,218 +74,170 @@ class AppFixtures extends Fixture
         $manager->persist($campus1);
         $manager->persist($campus2);
         $manager->persist($campus3);
-        //_____________________________________________
-
-
-        //Fixtures for entity User
-        //_____________________________________________
-        $user1 = new User();
-        $user1->setCampus($campus1)
-            ->setUsername('user1')
-            ->setEmail('email1@dom.com')
-            ->setName('lastName1')
-            ->setFirstName('firstname1')
-            ->setPhone('0601025501');
-        $password1 = $this->encoder->encodePassword($user1, 'password1');
-        $user1->setPassword($password1);
-
-        $user2 = new User();
-        $user2->setCampus($campus1)
-            ->setUsername('user2')
-            ->setEmail('email2@dom.com')
-            ->setName('lastName2')
-            ->setFirstName('firstname2')
-            ->setPhone('0242857643');
-        $password2 = $this->encoder->encodePassword($user2, 'password2');
-        $user2->setPassword($password2);
-
-        $user3 = new User();
-        $user3->setCampus($campus3)
-            ->setUsername('user3')
-            ->setEmail('email3@dom.com')
-            ->setName('lastName3')
-            ->setFirstName('firstname3')
-            ->setPhone('0745869210');
-        $password3 = $this->encoder->encodePassword($user3, 'password3');
-        $user3->setPassword($password3);
-
-        //persist() is done after activities' one because of manyToMany relation
-
-        //_____________________________________________
-
-
-        //Fixtures for entity City
-        //_____________________________________________
-        $city1 = new City();
-        $city1->setName('Nantes')
-            ->setPostalCode('44000');
-        $city2 = new City();
-        $city2->setName('Rennes')
-            ->setPostalCode('35000');
-        $city3 = new City();
-        $city3->setName('La Roche sur Yon')
-            ->setPostalCode('85000');
-        $manager->persist($city1);
-        $manager->persist($city2);
-        $manager->persist($city3);
-        //_____________________________________________
-
-
-        //Fixtures for entity Location
-        //_____________________________________________
-        $location1 = new Location();
-        $location1->setName('location 1')
-            ->setStreet('11 rue1')
-            ->setLatitude(4.358782)
-            ->setLongitude(2.050278)
-            ->setCity($city1);
-        $location2 = new Location();
-        $location2->setName('location 2')
-            ->setStreet('22 rue2')
-            ->setLatitude(7.134058)
-            ->setLongitude(9.014714)
-            ->setCity($city2);
-
-        $location3 = new Location();
-        $location3->setName('location3')
-            ->setStreet('33 ru3')
-            ->setLatitude(1.052520)
-            ->setLongitude(2.360548)
-            ->setCity($city3);
-
-        $manager->persist($location1);
-        $manager->persist($location2);
-        $manager->persist($location3);
-        //_____________________________________________
-
-
-        //Fixtures for entity State
-        //_____________________________________________
-        $state1 = new State();
-        $state1->setLabel(State::TAB_LABEL[0]);
-        $manager->persist($state1);
-
-        $state2 = new State();
-        $state2->setLabel(State::TAB_LABEL[1]);
-        $manager->persist($state2);
-
-        $state3 = new State();
-        $state3->setLabel(State::TAB_LABEL[2]);
-        $manager->persist($state3);
-
-        $state4 = new State();
-        $state4->setLabel(State::TAB_LABEL[3]);
-        $manager->persist($state4);
-
-        $state5 = new State();
-        $state5->setLabel(State::TAB_LABEL[4]);
-        $manager->persist($state5);
-
-        $state6 = new State();
-        $state6->setLabel(State::TAB_LABEL[5]);
-        $manager->persist($state6);
-        //_____________________________________________
-
-        //Fixtures for entity Activity
-        //_____________________________________________
-        $activity1 = new Activity();
-        $activity1->setLocation($location1)
-            ->setCampus($campus1)
-            ->setUserOwner($user1)
-            ->addUser($user2)
-            ->setState($state1)
-            ->setName('activity1')
-            ->setStartDateTime(new \DateTime('2021-07-14'))
-            ->setDuration(4)
-            ->setInscriptionLimitDate(new \DateTime('2021-07-12'))
-            ->setMaxInscriptionsNb(10)
-            ->setActivityInfo('Sortie du 14 juillet');
-
-        $activity2 = new Activity();
-        $activity2->setLocation($location2)
-            ->setCampus($campus2)
-            ->setUserOwner($user2)
-            ->addUser($user1)->addUser($user3)
-            ->setState($state1)
-            ->setName('activity2')
-            ->setStartDateTime(new \DateTime('2021-09-04'))
-            ->setDuration(5)
-            ->setInscriptionLimitDate(new \DateTime('2021-09-04'))
-            ->setMaxInscriptionsNb(25)
-            ->setActivityInfo('Pot de rentrée');
-
-        $activity3 = new Activity();
-        $activity3->setLocation($location3)
-            ->setCampus($campus3)
-            ->setUserOwner($user3)
-            //No addUser()
-            ->setState($state1)
-            ->setName('activity3')
-            ->setStartDateTime(new \DateTime('2021-12-25'))
-            ->setDuration(6)
-            ->setInscriptionLimitDate(new \DateTime('2021-12-15'))
-            ->setMaxInscriptionsNb(15)
-            ->setActivityInfo('Repas de noël');
-
-        $activity4 = new Activity();
-        $activity4->setLocation($location1)
-            ->setCampus($campus1)
-            ->setUserOwner($user1)
-            ->addUser($user2)->addUser($user3)
-            ->setState($state1)
-            ->setName('activity4')
-            ->setStartDateTime(new \DateTime('2021-07-28'))
-            ->setDuration(4)
-            ->setInscriptionLimitDate(new \DateTime('2021-07-17'))
-            ->setMaxInscriptionsNb(20)
-            ->setActivityInfo('Promenade en fôret');
-
-        $activity5 = new Activity();
-        $activity5->setLocation($location1)
-            ->setCampus($campus1)
-            ->setUserOwner($user3)
-            ->addUser($user1)
-            ->setState($state1)
-            ->setName('activity5')
-            ->setStartDateTime(new \DateTime('2021-08-08'))
-            ->setDuration(2)
-            ->setInscriptionLimitDate(new \DateTime('2021-08-08'))
-            ->setMaxInscriptionsNb(6)
-            ->setActivityInfo('Aqua-poney à la piscine');
-
-        $activity6 = new Activity();
-        $activity6->setLocation($location1)
-            ->setCampus($campus3)
-            ->setUserOwner($user3)
-            ->addUser($user1)->addUser($user2)
-            ->setState($state1)
-            ->setName('activity6')
-            ->setStartDateTime(new \DateTime('2021-10-01'))
-            ->setDuration(3)
-            ->setInscriptionLimitDate(new \DateTime('2021-10-01'))
-            ->setMaxInscriptionsNb(12)
-            ->setActivityInfo('Cinéma');
-
-                //Adding activities to users
-                //___________________
-                $user1->addActivity($activity2)->addActivity($activity5)->addActivity($activity5);
-                $user2->addActivity($activity1)->addActivity($activity4)->addActivity($activity6);
-                $user3->addActivity($activity2)->addActivity($activity4);
-
-                $manager->persist($user1);
-                $manager->persist($user2);
-                $manager->persist($user3);
-                //___________________
-
-        $manager->persist($activity1);
-        $manager->persist($activity2);
-        $manager->persist($activity3);
-        $manager->persist($activity4);
-        $manager->persist($activity5);
-        $manager->persist($activity6);
-        //_____________________________________________
-
 
         $manager->flush();
     }
+
+    private function fixCities(ObjectManager $manager){
+        $generator = Factory::create('fr_FR');
+
+        for ($i = 0; $i < self::NB_CITIES; $i++){
+            $city = new City();
+            $city->setName($generator->city)
+                ->setPostalCode($generator->postcode);
+            $manager->persist($city);
+        }
+        $manager->flush();
+    }
+
+    private function fixlocations(ObjectManager $manager)
+    {
+        $generator = Factory::create('fr_FR');
+        $cities = $this->cityRepository->findAll();
+
+        for ($i = 0; $i <= self::NB_LOCATIONS; $i++) {
+            $city = $cities[$generator->numberBetween(0, count($cities)-1)];
+            $location = new Location();
+            $location->setName('lieu n°'.$i)
+                ->setStreet($generator->streetAddress)
+                ->setLatitude($generator->randomFloat(6,0, 9))
+                ->setLongitude($generator->randomFloat(6,0, 9))
+                ->setCity($city);
+            $manager->persist($location);
+
+            $city->addLocation($location);
+            $manager->persist($city);
+        }
+        $manager->flush();
+    }
+
+    private function fixStates(ObjectManager $manager){
+        for ($i = 0; $i < 6; $i++){
+            $state = new State();
+            $state->setLabel(State::TAB_LABEL[$i]);
+            $manager->persist($state);
+        }
+        $manager->flush();
+    }
+
+    private function fixUsers(ObjectManager $manager){
+        $generator = Factory::create('fr_FR');
+        $campuses = $this->campusRepository->findAll();
+
+        for ($i = 0; $i < self::NB_USERS; $i++){
+            $campus = $campuses[$generator->numberBetween(0, count($campuses)-1)];
+            $user = new User();
+            $password = $this->encoder->encodePassword($user, 'password'.$i);
+
+            $user->setUsername($generator->userName)
+                ->setName($generator->lastName)
+                ->setFirstName($generator->firstName)
+                ->setPhone($generator->phoneNumber)
+                ->setEmail($generator->email)
+                ->setRoles(['ROLE_USER'])
+                ->setPassword($password)
+                ->setCampus($campus)
+                ->setActive(true)
+                ->setAdmin(false);
+            $manager->persist($user);
+
+            $campus->addUser($user);
+            $manager->persist($campus);
+        }
+        $manager->flush();
+    }
+
+    private function fixActivities(ObjectManager $manager){
+        $generator = Factory::create('fr_FR');
+        $campuses = $this->campusRepository->findAll();
+        $states = $this->stateRepository->findAll();
+        $users = $this->userRepository->findAll();
+        $locations = $this->locationRepository->findAll();
+        for ($i = 0; $i < self::NB_ACTIVITIES; $i++){
+            $campus = $campuses[$generator->numberBetween(0, count($campuses)-1)];
+            $userOwner = $users[$generator->numberBetween(0, count($users)-1)];
+            $location = $locations[$generator->numberBetween(0, count($locations)-1)];
+            $startDate = $generator->dateTimeBetween('2020-09-01','2022-07-04');
+            $limitDate = $generator->dateTimeBetween('2020-09-01', $startDate);
+            $activity = new Activity();
+            $state = $states[$generator->numberBetween(0, count($states)-1)];
+            $activity->setName('Sortie n°'.$i)
+                ->setStartDateTime($startDate)
+                ->setDuration($generator->numberBetween(1, 12))
+                ->setInscriptionLimitDate($limitDate)
+                ->setActivityInfo($generator->realText(120))
+                ->setMaxInscriptionsNb($generator->numberBetween(1, 30))
+                ->setCampus($campus)
+                ->setUserOwner($userOwner)
+                ->setState($state)
+                ->setLocation($location);
+//            for ($j = 0; $j < $generator->numberBetween(0, 30); $j++){
+//                $activity->addUser($users[$generator->numberBetween(0, count($users))]);
+//            }
+            $manager->persist($activity);
+            $userOwner->addActivitiesOwned($activity);
+            $manager->persist($userOwner);
+            $campus->addActivity($activity);
+            $manager->persist($campus);
+            $location->addActivity($activity);
+            $manager->persist($location);
+            $state->addActivity($activity);
+            $manager->persist($state);
+        }
+        $manager->flush();
+    }
+
+    private function fixUsersActivities(ObjectManager $manager)
+    {
+        $generator = Factory::create('fr_FR');
+        $activities = $this->activityRepository->findAll();
+        $users = $this->userRepository->findAll();
+
+        for ($i = 0; $i < count($activities); $i++){
+            $activity = $activities[$i];
+            for ($j = 0; $j < $generator->numberBetween(0, self::MAX_ACTIVITIES_PER_USER); $j++) {
+                $user = $users[$generator->numberBetween(0, count($users)-1)];
+                $activity->addUser($user);
+                $user->addActivity($activity);
+                $manager->persist($user);
+            }
+            $manager->persist($activity);
+        }
+        $manager->flush();
+    }
+
+    private function fixTestUser(ObjectManager $manager){
+        $campus = $this->campusRepository->findOneBy(['name' => 'Chartres de Bretagne']);
+        $martin = new User();
+        $passwordMartin = $this->encoder->encodePassword($martin, 'martin');
+        $martin->setUsername('martin')
+            ->setName('Fléchard')
+            ->setFirstName('Martin')
+            ->setPhone('0614586523')
+            ->setEmail('martin.flechard2021@campus-eni.fr')
+            ->setRoles(['ROLE_USER'])
+            ->setPassword($passwordMartin)
+            ->setCampus($campus)
+            ->setActive(true)
+            ->setAdmin(false);
+        $antoine = new User();
+        $passwordAntoine = $this->encoder->encodePassword($martin, 'password');
+        $antoine->setUsername('antoine')
+            ->setName('Morfouesse')
+            ->setFirstName('Antoine')
+            ->setPhone('0647586932')
+            ->setEmail('antoine.morfouesse2021@campus-eni.fr')
+            ->setRoles(['ROLE_USER'])
+            ->setPassword($passwordAntoine)
+            ->setCampus($campus)
+            ->setActive(true)
+            ->setAdmin(false);
+        $campus->addUser($martin);
+        $manager->persist($martin);
+        $campus->addUser($antoine);
+        $manager->persist($antoine);
+        $manager->persist($campus);
+        $manager->flush();
+    }
+
 }

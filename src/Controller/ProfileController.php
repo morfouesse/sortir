@@ -62,6 +62,8 @@ class ProfileController extends AbstractController
     #[Route('/profile/changePassword', name: 'profile_changePassword')]
     public function changePassword(UserPasswordEncoderInterface $encoder, Request $request): Response
     {
+        $errorInvalidPassword = null;
+
         $changePasswordForm = $this->createForm(ChangePasswordType::class);
         $changePasswordForm->handleRequest($request);
 
@@ -79,15 +81,13 @@ class ProfileController extends AbstractController
                 $this->getDoctrine()->getManager()->flush();
                 $this->getDoctrine()->getManager()->refresh($this->getUser());
                 return $this->redirectToRoute('profile_myProfile');
-            } //else {
-//              throw new AuthenticationException('Mot de passe courant incorrect');
-
-//            }
-
+            } else {
+              $errorInvalidPassword = 'Erreur : mot de passe incorrect';
+            }
         }
-
         return $this->render('profile/changePassword.html.twig', [
-            'changePasswordForm' => $changePasswordForm->createView()
+            'changePasswordForm' => $changePasswordForm->createView(),
+            'errorInvalidPassword' => $errorInvalidPassword
         ]);
     }
 }
