@@ -3,10 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
         {% block stylesheets %}
             <link href="{{ asset('build/app.css') }}" rel="stylesheet">
-            <link rel="icon" href="{{ asset('build/images/ecolierLogo.434b4a8b.png') }}">
+            <link rel="icon" href="{{ asset('build/images/ecolierLogo.png') }}">
         {% endblock %}
 
 
@@ -19,6 +20,7 @@
 
     <footer>
         {% include('main/footer.html.twig') %}
+
     </footer>
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}

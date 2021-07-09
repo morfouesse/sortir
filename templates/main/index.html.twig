@@ -4,7 +4,145 @@
 
 {% block body %}
     <main>
-        <h1>bienvenue</h1>
+        {# filtre #}
+        <div class="columns">
+            <div class="column sidebar">
+                {{ form_start(form) }}
+                <nav class="panel">
+                    <p class="panel-heading">
+                        Filtres
+                    </p>
+                    <div class="panel-block">
+                        <p class="control has-icons-left">
+
+                            {{ form_widget(form.q) }}
+
+                            <span class="icon is-left">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
+                        </p>
+                    </div>
+
+                    <div class="panel-block">
+                        <div class="control has-icons-left">
+
+                            <div class="select">
+                                {{ form_widget(form.campuses) }}
+                            </div>
+                            <span class="icon is-left" style="color: #e44b79">
+                             <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <p>Entre</p>
+                        <div class="px-2">
+                            {{ form_widget(form.startDate, { 'attr': {'min': 'now'|date('Y-m-d') }}) }}
+                        </div>
+
+                        <p>et </p>
+                        <div class="px-2">
+                            {{ form_widget(form.lastDate, { 'attr': {'min': 'now'|date('Y-m-d') }}) }}
+
+                        </div>
+                    </div>
+                    <label class="panel-block">
+                        {{ form_widget(form.userOwnActivities) }}
+                        <p>Sorties dont je suis l'organisateur/trice</p>
+                    </label>
+                    <label class="panel-block">
+                        {{ form_widget(form.usersActivities) }}
+                        <p>Sorties auxquelles je suis inscrit/e</p>
+                    </label>
+                    <label class="panel-block">
+                        {{ form_widget(form.userNotActivities) }}
+                        <p>Sorties auxquelles je ne suis pas inscrit/e</p>
+                    </label>
+                    <label class="panel-block">
+                        {{ form_widget(form.pastActivities) }}
+                        <p>Sorties passées</p>
+                    </label>
+
+                    <div class="panel-block">
+                        <button type="submit" class="button is-link is-outlined is-fullwidth">
+                            Valider
+                        </button>
+                    </div>
+                </nav>
+                {{ form_end(form) }}
+            </div>
+            {# card #}
+            <div class="columns is-multiline p-6">
+                {% for item in activities %}
+                    <div class="column is-4-desktop is-12-tablet is-12-mobile">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image is-4by3">
+                                    <img src="https://bulma.io/images/placeholders/1280x960.png"
+                                         alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-48x48">
+                                            <img src="https://bulma.io/images/placeholders/96x96.png"
+                                                 alt="Placeholder image">
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <p class="title is-4">{{ item.name }}</p>
+                                        <p class="subtitle is-6"><a href="#">{{ item.userOwner.name }}</a></p>
+                                    </div>
+                                    <div class="media-right">
+                                        <p>{{ item.users.count }} / {{ item.maxInscriptionsNb }}</p>
+                                        <p>{{ item.state.label }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="content">
+                                    <p>
+                                        {{ item.activityInfo }}
+                                    </p>
+                                    <p class="subtitle is-6">
+                                        Commence le:
+                                        {{ item.startDateTime | date('d/m/Y') }}
+                                        <br>
+                                        Fin des inscriptions:
+                                        {{ item.inscriptionLimitDate | date('d/m/Y') }}
+                                    </p>
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                {% if item.state.label == 'created' %}
+                                    <a href="#" class="card-footer-item">Modifier</a>
+                                    <a href="#" class="card-footer-item">Publier</a>
+                                {% endif %}
+
+                                {% if item.state.label == 'open' and app.user.name == item.userOwner.name %}
+                                    <a href="#" class="card-footer-item">Afficher</a>
+                                    <a href="#" class="card-footer-item">Annuler</a>
+                                {% elseif item.state.label == 'open' %}
+                                    <a href="#" class="card-footer-item">Afficher</a>
+                                    <a href="#" class="card-footer-item">S'inscrire</a>
+                                {% endif %}
+
+                                {% if item.state.label == 'onGoing' %}
+                                    <a href="#" class="card-footer-item">Afficher</a>
+                                {% endif %}
+
+                                {% if item.state.label == 'close' and item.users.id == app.user.id %}
+                                    <a href="#" class="card-footer-item">Afficher</a>
+                                    <a href="#" class="card-footer-item">Se désister</a>
+                                {% elseif item.state.label == 'close' %}
+                                    <a href="#" class="card-footer-item">Afficher</a>
+                                {% endif %}
+                            </footer>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </main>
 
 {% endblock %}
