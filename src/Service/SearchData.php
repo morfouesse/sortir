@@ -8,7 +8,7 @@ class SearchData
 {
 
     /**
-     * @var int
+     * @var integer
      */
     public $id;
     /**
@@ -32,22 +32,22 @@ class SearchData
     public $lastDate;
 
     /**
-     * @var Boolean
+     * @var integer
      */
     public $userOwnActivities;
 
      /**
-      * @var Boolean
+      * @var integer
       */
     public $usersActivities;
 
      /**
-      * @var Boolean
+      * @var integer
       */
     public $userNotActivities;
 
     /**
-     * @var Boolean
+     * @var integer
      */
     public $pastActivities;
 

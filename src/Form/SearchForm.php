@@ -3,7 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Campus;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Service\SearchData;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -13,11 +17,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchForm extends AbstractType // pour dire qu'on est en présence d'un formulaire
 {
-    //on utilise pas le CLI form car on n'utilise pas d'entité ici
+ /*   public $em;
+    public User $user;
 
+    public function __construct(EntityManagerInterface $em) {
+        $this->em = $em;
+
+
+    }*/
+
+
+    //on utilise pas le CLI form car on n'utilise pas d'entité ici
     public function buildForm(FormBuilderInterface $builder, array $options)
     {//contruire le form
-
         $builder
             ->add(
                 'q',
@@ -32,6 +44,7 @@ class SearchForm extends AbstractType // pour dire qu'on est en présence d'un f
                         ]
                 ]
             )
+
             ->add(
                 'campuses',
                 EntityType::class,
@@ -41,6 +54,9 @@ class SearchForm extends AbstractType // pour dire qu'on est en présence d'un f
                     'required' => false,
                     'expanded' => false,
                     'multiple' => true,
+                  //  'choice_value' => 'id',
+                 //   'data' => $this->em->getReference(Campus::class, 6)
+
                 ]
             )
             ->add(

@@ -7,6 +7,7 @@ use App\Service\SearchData;
 use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @method Activity|null find($id, $lockMode = null, $lockVersion = null)
@@ -63,8 +64,10 @@ class ActivityRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('a')
-            ->select('a,c')
-            ->join('a.campus', 'c');
+            ->select('a,c,u,uO')
+            ->join('a.campus', 'c')
+            ->join('a.userOwner', 'uO')
+            ->join('a.users', 'u');
         if (!empty($data->q)) {
             $query = $query
                 ->andWhere('a.name LIKE :q')
@@ -73,13 +76,6 @@ class ActivityRepository extends ServiceEntityRepository
         }
         if (!empty($data->campuses)) {
             $query = $query
-                //probleme prend la premiere val par default
-                ->andWhere('c.id IN (:campus)')
-                ->setParameter('campus', $data->campuses);
-        }
-        if (!empty($data->startDate)) {
-            $query = $query
-                //TODO:probleme prend la premiere val par default
                 ->andWhere('c.id IN (:campus)')
                 ->setParameter('campus', $data->campuses);
         }
@@ -98,27 +94,28 @@ class ActivityRepository extends ServiceEntityRepository
 
         if(!empty(($data->userOwnActivities))){
             $query = $query
-                ->andWhere('a.userOwner.id =: userOwner')
-                ->setParameter('userOwner', $this->getUser()->getId());
+                ->andWhere('uO.id IN (:userOwnActivities)')
+                ->setParameter('userOwnActivities', $data->id);
+
         }
 
         if(!empty(($data->usersActivities))){
             $query = $query
-                ->andWhere('a.users.id =:usersActivities')
-                ->setParameter('usersActivities', $data->usersActivities);
+                ->andWhere('u.id IN (:usersActivities)')
+                ->setParameter('usersActivities', $data->id);
         }
 
         if(!empty(($data->userNotActivities))){
             $query = $query
-                ->andWhere('a.users.id !=:lastDate')
-                ->setParameter('userNotActivities', $data->userNotActivities);
+                ->andWhere('u.id NOT IN (:userNotActivities)')
+                ->setParameter('userNotActivities', $data->id);
         }
 
         if(!empty(($data->pastActivities))){
             $query = $query
-                ->andWhere('a. =:pastActivities')
-                ->setParameter('pastActivities', $data->pastActivities);
+                ->andWhere('a.startDateTime < CURRENT_DATE()');
         }
+
 
         return $query->getQuery()->getResult();
     }
