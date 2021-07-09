@@ -34,7 +34,6 @@ class AppFixtures extends Fixture
     private const NB_LOCATIONS = 30;
     private const NB_USERS = 50;
     private const NB_ACTIVITIES = 50;
-    private const MAX_ACTIVITIES_PER_USER = 6;
 
 
     public function __construct(UserPasswordEncoderInterface $encoder, CampusRepository $campusRepository,
@@ -84,7 +83,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < self::NB_CITIES; $i++){
             $city = new City();
             $city->setName($generator->city)
-                ->setPostalCode($generator->postcode);
+                ->setPostalCode($generator->numberBetween(10000, 99999));
             $manager->persist($city);
         }
         $manager->flush();
@@ -195,7 +194,8 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < count($activities); $i++){
             $activity = $activities[$i];
-            for ($j = 0; $j < $generator->numberBetween(0, self::MAX_ACTIVITIES_PER_USER); $j++) {
+            $endLoop = $activity->getMaxInscriptionsNb() - $generator->numberBetween(0, $activity->getMaxInscriptionsNb());
+            for ($j = 0; $j < $endLoop; $j++) {
                 $user = $users[$generator->numberBetween(0, count($users)-1)];
                 $activity->addUser($user);
                 $user->addActivity($activity);
