@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} | {{ activity.name }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ activity.name }}</h1>
+    <div>Date et heure de la sortie : {{ activity.startDateTime | date('d/m/Y - h:m')}}</div>
+    <div>Date limite d'inscription : {{ activity.inscriptionLimitDate | date('d/m/Y') }}</div>
+    <div>Nombre de places : {{ activity.maxInscriptionsNb }} | (reste : {{ activity.maxInscriptionsNb - activity.users.count }})</div>
+    <div>Durée : {{ activity.duration }} heures</div>
+    <div>Description et infos : {{ activity.activityInfo }}</div>
+    <div>Campus : {{ activity.campus.name }}</div>
+    <div>Lieu : {{ activity.location.name }}</div>
+    <div>Rue : {{ activity.location.street }}</div>
+    <div>Ville : {{ activity.location.city.name }}</div>
+    <div>Code postal : {{ activity.location.city.postalCode }}</div>
+    <div>Latitude : {{ activity.location.latitude }}</div>
+    <div>Longitude : {{ activity.location.longitude }}</div>
+
+    <div>
+        <h2>Liste des participants</h2>
+        <ul>
+            {% for user in activity.users %}
+                <li>{{ user.username }} | {{ user.name }} {{ user.firstName }}</li>
+            {%  endfor %}
+        </ul>
+    </div>
+
+    {{ app.user.name }}
+    {% for user in activity.users %}
+    {{ user.name }}
+    {% endfor %}
+    {% if app.user in activity.users %}
+        <div>
+            <a href="{{ path('activity_signIn', {'id': activity.id }) }}">S'inscrire</a>
+        </div>
+    {% else %}
+        <div>
+            <a href="{{ path('activity_signOut', {'id': activity.id }) }}">Se désinscrire</a>
+        </div>
+    {% endif %}
+
+    <div>
+        <a href="{{ path('main_index') }}">Retour</a>
+    </div>
+
+{% endblock %}
+
+
+
