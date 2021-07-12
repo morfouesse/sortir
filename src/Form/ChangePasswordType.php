@@ -17,12 +17,21 @@ class ChangePasswordType extends AbstractType
     {
         $builder
             ->add('currentPassword', PasswordType::class, [
-                'label' => 'Ancien mot de passe'
+                'label' => 'Ancien mot de passe',
+                'label_attr' => [
+                    'class' => 'subtitle'
+                ],
+                'attr' => [
+                    'class' => 'input field-input',
+                ]
             ])
             ->add('newPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'attr' => ['autocomplete' => 'new-password'],
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'class' => 'input field-input'
+                    ],
                     'constraints' => [
 //                        new NotBlank([
 //                            'message' => 'Please enter a password',
@@ -35,17 +44,31 @@ class ChangePasswordType extends AbstractType
                         ]),
                     ],
                     'label' => 'Nouveau mot de passe',
+                    'label_attr' => [
+                        'class' => 'label'
+                    ],
+                    'row_attr' => [
+                        'class' => 'is-normal has-text-centered'
+                    ]
                 ],
                 'second_options' => [
-                    'attr' => ['autocomplete' => 'new-password'],
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'class' => 'input field-input'
+                    ],
                     'label' => 'Confirmer le nouveau mot de passe',
+                    'label_attr' => [
+                        'class' => 'label'
+                    ],
+                    'row_attr' => [
+                        'class' => 'is-normal has-text-centered'
+                    ]
                 ],
                 'invalid_message' => 'Veuillez entrer le même mot de passe.',
                 // Instead of being set onto the object directly,
                 // this is read and encoded in the controller
 //                'mapped' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
