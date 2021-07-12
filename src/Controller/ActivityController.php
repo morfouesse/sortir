@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ActivityRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,31 +25,59 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/activity/signIn/{id}', name: 'activity_signIn')]
-    public function signIn(int $id, ActivityRepository $activityRepository, UserRepository $userRepository): Response
+    public function signIn(int $id, ActivityRepository $activityRepository,
+                           UserRepository $userRepository, EntityManagerInterface $manager): Response
     {
+        $userId = $this->getUser()->getId();
+        $user = $userRepository->find($userId);
+
         $activity = $activityRepository->find($id);
         if (!$activity){
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
 
-        $activity->addUser($this->getUser());
-        $this->getUser()->addActivity($activity);
+        //To test before sign the user in : state : open | limitDate ok | limitInscriptions ok
+        $stateIsOpen = $activity->getState()->getLabel() == 'open';
+        $limitDateNotPassed = $activity->getInscriptionLimitDate() > new \DateTime('now');
+        $activityIsNotFull = count($activity->getUsers()) < $activity->getMaxInscriptionsNb();
 
+        if ($stateIsOpen && $limitDateNotPassed && $activityIsNotFull) {
+            $activity->addUser($user);
+            $user->addActivity($activity);
+
+            $manager->persist($user);
+            $manager->persist($activity);
+            $manager->flush();
+
+            return $this->render('activity/showActivity.html.twig', [
+                'activity' => $activity
+            ]);
+        } else {
+            $errorInscritpionDenied = 'Erreur : il n\'est plus possible de s\'inscrire à cette sortie';
+        }
         return $this->render('activity/showActivity.html.twig', [
-            'activity' => $activity
+            'activity' => $activity,
+            'errorInscritpionDenied' => $errorInscritpionDenied
         ]);
     }
 
     #[Route('/activity/signOut/{id}', name: 'activity_signOut')]
-    public function signOut(int $id, ActivityRepository $activityRepository): Response
+    public function signOut(int $id, ActivityRepository $activityRepository,
+                            UserRepository $userRepository, EntityManagerInterface $manager): Response
     {
+        $userId = $this->getUser()->getId();
+        $user = $userRepository->find($userId);
+
         $activity = $activityRepository->find($id);
         if (!$activity){
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
+        $activity->removeUser($user);
+        $user->removeActivity($activity);
 
-        $activity->removeUser($this->getUser());
-        $this->getUser()->removeActivity($activity);
+        $manager->persist($user);
+        $manager->persist($activity);
+        $manager->flush();
 
         return $this->render('activity/showActivity.html.twig', [
             'activity' => $activity

@@ -6,6 +6,7 @@
 
 {% block body %}
     <h1>{{ activity.name }}</h1>
+    <div>Créateur : <a href="{{ path('profile_showProfile', {'id': activity.userOwner.id }) }}">{{ activity.userOwner.firstName }} {{ activity.userOwner.name }}</a> </div>
     <div>Date et heure de la sortie : {{ activity.startDateTime | date('d/m/Y - h:m')}}</div>
     <div>Date limite d'inscription : {{ activity.inscriptionLimitDate | date('d/m/Y') }}</div>
     <div>Nombre de places : {{ activity.maxInscriptionsNb }} | (reste : {{ activity.maxInscriptionsNb - activity.users.count }})</div>
@@ -28,17 +29,22 @@
         </ul>
     </div>
 
-    {{ app.user.name }}
-    {% for user in activity.users %}
-    {{ user.name }}
-    {% endfor %}
+
+{# TEST #}
+{#   <br><br>#}
+{#    {% for user in activity.users %}#}
+{#    {{ user.name }}#}
+{#    {% endfor %}#}
+{#    <br><br>#}
+
+
     {% if app.user in activity.users %}
         <div>
-            <a href="{{ path('activity_signIn', {'id': activity.id }) }}">S'inscrire</a>
+            <a href="{{ path('activity_signOut', {'id': activity.id }) }}">Se désinscrire</a>
         </div>
     {% else %}
         <div>
-            <a href="{{ path('activity_signOut', {'id': activity.id }) }}">Se désinscrire</a>
+            <a href="{{ path('activity_signIn', {'id': activity.id }) }}">S'inscrire</a>
         </div>
     {% endif %}
 

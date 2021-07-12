@@ -122,19 +122,23 @@
                                 {% if item.state.label == 'open' and app.user.name == item.userOwner.name %}
                                     <a href="#" class="card-footer-item">Afficher</a>
                                     <a href="#" class="card-footer-item">Annuler</a>
+{# ici #}
+                                {% elseif item.state.label == 'open' and app.user in item.users %}
+                                    <a href="#" class="card-footer-item">Afficher</a>
+                                    <a href="{{ path('activity_signOut', {'id': item.id }) }}" class="card-footer-item">Se désinscrire</a>
                                 {% elseif item.state.label == 'open' %}
                                     <a href="#" class="card-footer-item">Afficher</a>
-                                    <a href="#" class="card-footer-item">S'inscrire</a>
+                                    <a href="{{ path('activity_signIn', {'id': item.id }) }}" class="card-footer-item">S'inscrire</a>
                                 {% endif %}
 
                                 {% if item.state.label == 'onGoing' %}
                                     <a href="#" class="card-footer-item">Afficher</a>
                                 {% endif %}
-
-                                {% if item.state.label == 'close' and item.users.id == app.user.id %}
+{# ici #}
+                                {% if item.state.label == 'closed' and app.user in item.users %}
                                     <a href="#" class="card-footer-item">Afficher</a>
-                                    <a href="#" class="card-footer-item">Se désister</a>
-                                {% elseif item.state.label == 'close' %}
+                                    <a href="{{ path('activity_signOut', {'id': item.id }) }}" class="card-footer-item">Se désister</a>
+                                {% elseif item.state.label == 'closed' %}
                                     <a href="#" class="card-footer-item">Afficher</a>
                                 {% endif %}
                             </footer>
