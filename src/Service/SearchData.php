@@ -8,10 +8,6 @@ class SearchData
 {
 
     /**
-     * @var integer
-     */
-    public $id;
-    /**
      * @var Campus[]
      */
     public $campuses = [];
@@ -51,7 +47,4 @@ class SearchData
      */
     public $pastActivities;
 
-    public function setId(int $id){
-        $this->id = $id;
-    }
 }
