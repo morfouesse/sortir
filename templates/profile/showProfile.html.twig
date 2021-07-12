@@ -5,17 +5,35 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ user.username }}</h1>
-    <div>Prénom : {{ user.firstName }}</div>
-    <div>Nom : {{ user.name }}</div>
-    <div>Téléphone : {{ user.phone }}</div>
-    <div>Email : {{ user.email }}</div>
-    <div>Campus : {{ user.campus.name }}</div>
+    <div class="column is-half is-offset-one-quarter">
+        <div class="box">
+            <h1 class="title has-text-centered">{{ user.username }}</h1>
+            <div class="m-4">
+                <p><span class="subtitle">Prénom : </span><span>{{ user.firstName }}</span></p>
+            </div>
+            <div class="m-4">
+                <p><span class="subtitle">Nom : </span><span>{{ user.name }}</span></p>
+            </div>
+            <div class="m-4">
+                <p><span class="subtitle">Téléphone : </span><span>{{ user.phone }}</span></p>
+            </div>
+            <div class="m-4">
+                <p><span class="subtitle">Email : </span><span>{{ user.email }}</span></p>
+            </div>
+            <div class="m-4">
+                <p><span class="subtitle">Campus : </span><span>{{ user.campus }}</span></p>
+            </div>
 
-    <div>
-        <a href="{{ path('main_index') }}">Retour</a>
+
+            <div class="m-4">
+                <a href="{{ path('main_index') }}">
+                    <button class="button is-link is-outlined">
+                        Retour
+                    </button>
+                </a>
+            </div>
+        </div>
     </div>
-
 
 
 {% endblock %}
