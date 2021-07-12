@@ -1,76 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} | Edit profile{% endblock %}
+{% block title %}{{ parent() }} | Editer mon profil{% endblock %}
 
 {% block body %}
-    <h1 class="title has-text-centered">Editer mon profil</h1>
+    <main>
+        <div class="column is-half">
+            <div class="py-6">
+                <div class="box">
+                    <h1 class="title has-text-centered">Editer mon profil</h1>
+                    {{ form_start(editProfileForm) }}
 
-    <div class="column is-half is-offset-one-quarter">
-        <div class="box">
-            {{ form_start(editProfileForm) }}
+                    <div class="field is-horizontal m-3">
+                        <div class="field-label is-normal has-text-centered">
+                            <label class="label">Pseudo</label>
+                        </div>
+                        <div class="field-body">
+                            {{ form_widget(editProfileForm.username) }}
+                        </div>
+                    </div>
 
-            <div class="field is-horizontal m-3">
-                <div class="field-label is-normal has-text-centered">
-                    <label class="label">Pseudo</label>
-                </div>
-                <div class="field-body">
-                    {{ form_widget(editProfileForm.username) }}
+                    <div class="field is-horizontal m-3">
+                        <div class="field-label is-normal has-text-centered">
+                            <label class="label">Nom</label>
+                        </div>
+                        <div class="field-body">
+                            {{ form_widget(editProfileForm.name) }}
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal m-3">
+                        <div class="field-label is-normal has-text-centered">
+                            <label class="label">Prénom</label>
+                        </div>
+                        <div class="field-body">
+                            {{ form_widget(editProfileForm.firstName) }}
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal m-3">
+                        <div class="field-label is-normal has-text-centered">
+                            <label class="label">Téléphone</label>
+                        </div>
+                        <div class="field-body">
+                            {{ form_widget(editProfileForm.phone) }}
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal m-4">
+                        <div class="field-label is-normal has-text-centered">
+                            <label class="label">Email</label>
+                        </div>
+                        <div class="field-body">
+                            {{ form_widget(editProfileForm.email) }}
+                        </div>
+                    </div>
+
+
+                    <div class="m-4">
+                        <button class="button is-link is-outlined is-fullwidth" type="submit">Valider</button>
+                    </div>
+                    {{ form_end(editProfileForm) }}
+
+
+                    <div class="m-4 mt-6">
+                        <a href="{{ path('profile_changePassword') }}">
+                            <button class="button is-link is-outlined">
+                                Modifier le mot de passe
+                            </button>
+                        </a>
+                    </div>
+
                 </div>
             </div>
-
-            <div class="field is-horizontal m-3">
-                <div class="field-label is-normal has-text-centered">
-                    <label class="label">Nom</label>
-                </div>
-                <div class="field-body">
-                    {{ form_widget(editProfileForm.name) }}
-                </div>
-            </div>
-
-            <div class="field is-horizontal m-3">
-                <div class="field-label is-normal has-text-centered">
-                    <label class="label">Prénom</label>
-                </div>
-                <div class="field-body">
-                    {{ form_widget(editProfileForm.firstName) }}
-                </div>
-            </div>
-
-            <div class="field is-horizontal m-3">
-                <div class="field-label is-normal has-text-centered">
-                    <label class="label">Téléphone</label>
-                </div>
-                <div class="field-body">
-                    {{ form_widget(editProfileForm.phone) }}
-                </div>
-            </div>
-
-            <div class="field is-horizontal m-4">
-                <div class="field-label is-normal has-text-centered">
-                    <label class="label">Email</label>
-                </div>
-                <div class="field-body">
-                    {{ form_widget(editProfileForm.email) }}
-                </div>
-            </div>
-
-
-            <div class="m-4">
-                <button class="button is-link is-outlined is-fullwidth" type="submit">Valider</button>
-            </div>
-            {{ form_end(editProfileForm) }}
-
-
-            <div class="m-4 mt-6">
-                <a href="{{ path('profile_changePassword') }}">
-                    <button class="button is-link is-outlined">
-                        Modifier le mot de passe
-                    </button>
-                </a>
-            </div>
-
         </div>
-    </div>
-
+    </main>
 {% endblock %}
 
