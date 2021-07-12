@@ -41,7 +41,7 @@ class ActivityController extends AbstractController
         $limitDateNotPassed = $activity->getInscriptionLimitDate() > new \DateTime('now');
         $activityIsNotFull = count($activity->getUsers()) < $activity->getMaxInscriptionsNb();
 
-        if ($stateIsOpen && $limitDateNotPassed && $activityIsNotFull) {
+        if (true) {
             $activity->addUser($user);
             $user->addActivity($activity);
 
