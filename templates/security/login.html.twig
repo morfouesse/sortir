@@ -3,36 +3,62 @@
 {% block title %}{{ parent() }} | Login{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <main>
+        <div class="bg-contact2">
+            <div class="container-contact2">
+                <div class="wrap-contact2">
+        <form method="post" class="contact2-form validate-form">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            {% if app.user %}
+                <div class="mb-3">
+                    Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Se
+                        déconnecter</a>
+                </div>
+            {% endif %}
+
+            <span class="contact2-form-title">
+						Inscription
+					</span>
+
+
+
+            <div class="wrap-input2 validate-input" data-validate="Un nom est requis !">
+                <input class="input2 form-control" type="text"
+                       name="username" autofocus>
+                <span class="focus-input2" data-placeholder="NOM"></span>
+            </div>
+
+            <div class="wrap-input2 validate-input" data-validate="Un mot de passe est requis !">
+                <input class="input2 form-control" type="password"
+                       name="password">
+                <span class="focus-input2" data-placeholder="MOT DE PASSE"></span>
+            </div>
+
+
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+
+
+            <div class="checkbox mb-3">
+                <input type="checkbox" id="remember_me" name="_remember_me"/>
+                <label for="remember_me">Se souvenir de moi</label>
+            </div>
+
+            <div class="container-contact2-form-btn">
+                <div class="wrap-contact2-form-btn">
+                    <div class="contact2-form-bgbtn"></div>
+                    <button type="submit" class="contact2-form-btn">
+                        Se connecter
+                    </button>
+                </div>
+            </div>
+        </form>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-    <label for="inputUsername">Pseudo</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-
-        <div class="checkbox mb-3">
-            <input type="checkbox" id="remember_me" name="_remember_me"/>
-            <label for="remember_me">Keep me logged in</label>
         </div>
-
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Se connecter
-    </button>
-</form>
+        </div>
+    </main>
 {% endblock %}

@@ -83,7 +83,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < self::NB_CITIES; $i++){
             $city = new City();
             $city->setName($generator->city)
-                ->setPostalCode($generator->numberBetween(10000, 99999));
+                ->setPostalCode($generator->randomNumber(5));
             $manager->persist($city);
         }
         $manager->flush();
@@ -131,7 +131,7 @@ class AppFixtures extends Fixture
             $user->setUsername($generator->userName)
                 ->setName($generator->lastName)
                 ->setFirstName($generator->firstName)
-                ->setPhone($generator->phoneNumber)
+                ->setPhone($generator->randomNumber(5) . $generator->randomNumber(5))
                 ->setEmail($generator->email)
                 ->setRoles(['ROLE_USER'])
                 ->setPassword($password)

@@ -2,12 +2,13 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
+
 use App\Service\SearchData;
 use App\Entity\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Security\Core\Security;
+
 
 /**
  * @method Activity|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,9 +18,11 @@ use Symfony\Component\Validator\Constraints\Date;
  */
 class ActivityRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public $security;
+    public function __construct(ManagerRegistry $registry, Security $s)
     {
         parent::__construct($registry, Activity::class);
+        $this->security = $s;
     }
 
     // /**
@@ -95,20 +98,20 @@ class ActivityRepository extends ServiceEntityRepository
         if(!empty(($data->userOwnActivities))){
             $query = $query
                 ->andWhere('uO.id IN (:userOwnActivities)')
-                ->setParameter('userOwnActivities', $data->id);
+                ->setParameter('userOwnActivities', $this->security->getUser()->getId());
 
         }
 
         if(!empty(($data->usersActivities))){
             $query = $query
                 ->andWhere('u.id IN (:usersActivities)')
-                ->setParameter('usersActivities', $data->id);
+                ->setParameter('usersActivities', $this->security->getUser()->getId());
         }
 
         if(!empty(($data->userNotActivities))){
             $query = $query
                 ->andWhere('u.id NOT IN (:userNotActivities)')
-                ->setParameter('userNotActivities', $data->id);
+                ->setParameter('userNotActivities', $this->security->getUser()->getId());
         }
 
         if(!empty(($data->pastActivities))){
