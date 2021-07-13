@@ -65,6 +65,8 @@ class ActivityRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchData $data): array
     {
+        //:TODO faire en sorte de ne pas afficher les sorties dont l'état est : 'archieved'
+
         $query = $this
             ->createQueryBuilder('a')
             ->select('a,c,u,uO')
