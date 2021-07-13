@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ActivityRepository;
 use App\Repository\UserRepository;
+use App\Service\signingValidation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,9 @@ class ActivityController extends AbstractController
 
     #[Route('/activity/signIn/{id}', name: 'activity_signIn')]
     public function signIn(int $id, ActivityRepository $activityRepository,
-                           UserRepository $userRepository, EntityManagerInterface $manager): Response
+                            UserRepository $userRepository, EntityManagerInterface $manager,
+                            signingValidation $valid
+    ): Response
     {
         $userId = $this->getUser()->getId();
         $user = $userRepository->find($userId);
@@ -41,7 +44,7 @@ class ActivityController extends AbstractController
         $limitDateNotPassed = $activity->getInscriptionLimitDate() > new \DateTime('now');
         $activityIsNotFull = count($activity->getUsers()) < $activity->getMaxInscriptionsNb();
 
-        if (true) {
+        if ($valid->canSignIn($activity)) {
             $activity->addUser($user);
             $user->addActivity($activity);
 

@@ -43,8 +43,8 @@ class ProfileController extends AbstractController
         $editProfilForm->handleRequest($request);
 
         if ($editProfilForm->isSubmitted() && $editProfilForm->isValid()){
-//            $encodedPassword = $encoder->encodePassword($this->getUser(), $editProfilForm->get('plainPassword')->getData());
-//            $this->getUser()->setPassword($encodedPassword);
+            $encodedPassword = $encoder->encodePassword($this->getUser(), $editProfilForm->get('plainPassword')->getData());
+            $this->getUser()->setPassword($encodedPassword);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
 
