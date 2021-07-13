@@ -7,6 +7,7 @@ use App\Service\SearchData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,12 +15,10 @@ use Symfony\Component\Security\Core\Security;
 
 class SearchForm extends AbstractType // pour dire qu'on est en présence d'un formulaire
 {
-   public $s;
+   private Security $s;
 
     public function __construct(Security $s) {
        $this->s = $s;
-
-
     }
 
 
@@ -50,17 +49,18 @@ class SearchForm extends AbstractType // pour dire qu'on est en présence d'un f
                     'required' => false,
                     'expanded' => false,
                     'multiple' => true,
-                  //  'choice_value' => 'id',
                     'data' => [$this->s->getUser()->getCampus()]
+
 
                 ]
             )
             ->add(
                 'startDate',
-                TextType::class,
+                DateType::class,
                 [
                     'label' => false,
                     'required' => false, //champs pas obligatoire pour une recherche
+                    'widget' => 'single_text',
                     'attr' =>
                         [
                             'class' => 'input',
@@ -69,9 +69,10 @@ class SearchForm extends AbstractType // pour dire qu'on est en présence d'un f
             )
             ->add(
                 'lastDate',
-                TextType::class,
+                DateType::class,
                 [
                     'label' => false,
+                    'widget' => 'single_text',
                     'required' => false, //champs pas obligatoire pour une recherche
                     'attr' =>
                         [

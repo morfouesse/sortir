@@ -1,7 +1,7 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="my-2" href="{{ path('main_index') }}">
-            <img class="logo" src="{{ asset('build/images/ecolierLogo.png') }}" alt="logo sortir">
+        <a class="my-2 mx-2" href="{{ path('main_index') }}">
+            <img class="logo" src="{{ asset('build/images/Logo_Par_ici_la_Sortie.png') }}" alt="logo sortir">
         </a>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -17,23 +17,26 @@
                 Accueil
             </a>
 
-    {% if app.user %}
-            <a class="navbar-item" href="{{ path('profile_myProfile') }}">
-                Mon profil
-            </a>
-    {% endif %}
+            {% if app.user %}
+                <a class="navbar-item" href="{{ path('profile_myProfile') }}">
+                    Mon profil
+                </a>
+                <a class="navbar-item" href="{{ path('crudActivity') }}">
+                    Crée une sortie !
+                </a>
+            {% endif %}
 
         </div>
         {% if app.user %}
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-light" href="{{ path('app_logout') }}" title="Logout">
-                        Se déconnecter
-                    </a>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-light" href="{{ path('app_logout') }}" title="Logout">
+                            Se déconnecter
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endif %}
     </div>
 </nav>
