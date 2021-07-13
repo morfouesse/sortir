@@ -15,9 +15,13 @@ if (document.getElementById('filter')) {
 
     // remove multiple attribute who is create in SearchForm
     document.getElementById("campuses").removeAttribute("multiple");
-    // change default value of form(text) to get a date
-    document.getElementById("startDate").setAttribute("type", "date");
-    document.getElementById("lastDate").setAttribute("type", "date");
+}
+
+if(document.getElementById('filter2')){
+
+    // remove multiple attribute who is create in form
+    const location = document.getElementById("crud_activity_location");
+    location.removeAttribute("multiple");
 }
 
 

@@ -79,7 +79,7 @@ class ActivityRepository extends ServiceEntityRepository
         }
         if (!empty($data->campuses)) {
             $query = $query
-                ->andWhere('c.id IN (:campus)')
+                ->andWhere('a.campus IN (:campus)')
                 ->setParameter('campus', $data->campuses);
         }
 

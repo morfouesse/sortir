@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class State
 {
     // default values for label
-    const TAB_LABEL = ['created','open','closed','onGoing','past','canceled'];
+    public const TAB_LABEL = ['created','open','closed','onGoing','past','canceled'];
 
 
     /**

@@ -6,6 +6,7 @@ use App\Repository\ActivityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ActivityRepository::class)
@@ -21,37 +22,72 @@ class Activity
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Ce champs doit être rempli")
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotNull(
+     *  message="Ce champs doit être rempli"
+     * )
+     * @Assert\Range(
+     *      min = "now",
+     *      max = "+1 years",
+     *      notInRangeMessage="la date actuelle au minimum et un an de plus au maximum"
+     * )
      */
     private $startDateTime;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=false)
+     * @Assert\NotNull(
+     *  message="Ce champs doit être rempli"
+     * )
+     * @Assert\Range(
+     *      min=3,
+     *      max= 60,
+     *      notInRangeMessage="Minimum {{ min }} minutes et {{ max }} minutes maximum",
+     * )
      */
     private $duration;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=false)
+     * @Assert\NotNull(
+     *  message="Ce champs doit être rempli"
+     * )
+     * @Assert\Range(
+     *      min = "now",
+     *      max = "+1 years",
+     *      notInRangeMessage="la date actuelle au minimum et un an de plus au maximum"
+     * )
      */
     private $inscriptionLimitDate;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=false)
+     * @Assert\NotNull(
+     *  message="Ce champs doit être rempli"
+     * )
+     * @Assert\Range(
+     *      min=3,
+     *      max= 60,
+     *      notInRangeMessage ="Minimum {{ min }} inscrits et {{ max }} inscrits maximum",
+     * )
      */
     private $maxInscriptionsNb;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Ce champs doit être rempli")
      */
     private $activityInfo;
 
     /**
      * @ORM\ManyToOne(targetEntity=Location::class, inversedBy="activities")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Ce champs doit être rempli")
      */
     private $location;
 

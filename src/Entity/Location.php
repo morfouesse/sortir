@@ -149,4 +149,5 @@ class Location
 
         return $this;
     }
+
 }

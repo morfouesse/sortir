@@ -426,3 +426,15 @@ textarea.input2 + .focus-input2::after {
         opacity: 1;
     }
 }
+
+.label{
+    color: #e6536e;
+}
+
+.title{
+    color: #e6536e;
+}
+
+.error > ul{
+    color: red;
+}
