@@ -111,7 +111,7 @@ class AppFixtures extends Fixture
     }
 
     private function fixStates(ObjectManager $manager){
-        for ($i = 0; $i < 6; $i++){
+        for ($i = 0; $i < 7; $i++){
             $state = new State();
             $state->setLabel(State::TAB_LABEL[$i]);
             $manager->persist($state);

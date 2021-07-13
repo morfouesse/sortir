@@ -69,8 +69,6 @@ class ProfileController extends AbstractController
 
 
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()){
-
-
             $data = $changePasswordForm->getData();
 
             if ($encoder->isPasswordValid($this->getUser(), $data['currentPassword'])){
@@ -80,6 +78,7 @@ class ProfileController extends AbstractController
                 $this->getDoctrine()->getManager()->persist($this->getUser());
                 $this->getDoctrine()->getManager()->flush();
                 $this->getDoctrine()->getManager()->refresh($this->getUser());
+
                 return $this->redirectToRoute('profile_myProfile');
             } else {
               $errorInvalidPassword = 'Erreur : mot de passe incorrect';

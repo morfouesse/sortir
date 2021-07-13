@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ActivityRepository;
 use App\Repository\UserRepository;
-use App\Service\signingValidation;
+use App\Service\stateManagement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +28,7 @@ class ActivityController extends AbstractController
     #[Route('/activity/signIn/{id}', name: 'activity_signIn')]
     public function signIn(int $id, ActivityRepository $activityRepository,
                             UserRepository $userRepository, EntityManagerInterface $manager,
-                            signingValidation $valid
+                            stateManagement $valid
     ): Response
     {
         $userId = $this->getUser()->getId();
@@ -38,11 +38,6 @@ class ActivityController extends AbstractController
         if (!$activity){
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
-
-        //To test before sign the user in : state : open | limitDate ok | limitInscriptions ok
-        $stateIsOpen = $activity->getState()->getLabel() == 'open';
-        $limitDateNotPassed = $activity->getInscriptionLimitDate() > new \DateTime('now');
-        $activityIsNotFull = count($activity->getUsers()) < $activity->getMaxInscriptionsNb();
 
         if ($valid->canSignIn($activity)) {
             $activity->addUser($user);

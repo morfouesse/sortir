@@ -67,7 +67,9 @@ class ActivityRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('a')
-            ->select('a,c,u,uO')
+            ->addSelect('c')
+            ->addSelect('uO')
+            ->addSelect('u')
             ->join('a.campus', 'c')
             ->join('a.userOwner', 'uO')
             ->join('a.users', 'u');
@@ -79,7 +81,7 @@ class ActivityRepository extends ServiceEntityRepository
         }
         if (!empty($data->campuses)) {
             $query = $query
-                ->andWhere('c.id IN (:campus)')
+                ->andWhere('a.campus IN(:campus)')
                 ->setParameter('campus', $data->campuses);
         }
 

@@ -16,22 +16,11 @@ class MainController extends AbstractController
     #[Route('/', name: 'main_index')]
     public function index(ActivityRepository $ar, Request $r): Response
     {
-
-
-        $activities = $ar->findAll();
-
         $data = new SearchData();
-
+        $activities = $ar->findSearch($data);
 
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($r);
-
-
-
-
-        if($form->isSubmitted() && $form->isValid()){
-           $activities = $ar->findSearch($data);
-        }
 
         return $this->render('main/index.html.twig',
         [
