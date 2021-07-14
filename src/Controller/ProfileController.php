@@ -59,7 +59,7 @@ class ProfileController extends AbstractController
             $entityManager->refresh($this->getUser());
 
             $this->addFlash('success', 'Votre profil a bien été modifié');
-            return $this->redirectToRoute('profile_myProfile');
+            return $this->redirectToRoute('profile_showProfile',['id' => $this->getUser()->getId()]);
         }
 
         return $this->render('profile/edit.html.twig', [
