@@ -65,7 +65,6 @@ class ActivityRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchData $data): array
     {
-        //:TODO faire en sorte de ne pas afficher les sorties dont l'état est : 'archieved'
 
         $query = $this
             ->createQueryBuilder('a')
@@ -73,6 +72,7 @@ class ActivityRepository extends ServiceEntityRepository
             ->join('a.campus', 'c')
             ->join('a.userOwner', 'uO')
             ->join('a.users', 'u');
+
         if (!empty($data->q)) {
             $query = $query
                 ->andWhere('a.name LIKE :q')
@@ -99,21 +99,21 @@ class ActivityRepository extends ServiceEntityRepository
 
         if(!empty(($data->userOwnActivities))){
             $query = $query
-                ->andWhere('uO.id IN (:userOwnActivities)')
-                ->setParameter('userOwnActivities', $this->security->getUser()->getId());
+                ->andWhere('a.userOwner =:userOwnActivities')
+                ->setParameter('userOwnActivities', $this->security->getUser());
 
         }
 
         if(!empty(($data->usersActivities))){
             $query = $query
-                ->andWhere('u.id IN (:usersActivities)')
-                ->setParameter('usersActivities', $this->security->getUser()->getId());
+                ->andWhere('u =:usersActivities')
+                ->setParameter('usersActivities', $this->security->getUser());
         }
 
         if(!empty(($data->userNotActivities))){
             $query = $query
-                ->andWhere('u.id NOT IN (:userNotActivities)')
-                ->setParameter('userNotActivities', $this->security->getUser()->getId());
+                ->andWhere('u !=:userNotActivities')
+                ->setParameter('userNotActivities', $this->security->getUser());
         }
 
         if(!empty(($data->pastActivities))){

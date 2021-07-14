@@ -39,7 +39,8 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordEncoderInterface $encoder, CampusRepository $campusRepository,
                                 CityRepository $cityRepository, LocationRepository $locationRepository,
                                 StateRepository $stateRepository, UserRepository $userRepository,
-                                ActivityRepository $activityRepository){
+                                ActivityRepository $activityRepository,
+                                ){
         $this->encoder = $encoder;
         $this->campusRepository = $campusRepository;
         $this->cityRepository = $cityRepository;
@@ -138,6 +139,7 @@ class AppFixtures extends Fixture
                 ->setCampus($campus)
                 ->setActive(true)
                 ->setAdmin(false);
+                $user->setPictureName('imageDefault.png');
             $manager->persist($user);
 
             $campus->addUser($user);
@@ -220,6 +222,7 @@ class AppFixtures extends Fixture
             ->setCampus($campus)
             ->setActive(true)
             ->setAdmin(false);
+            $martin->setPictureName('imageDefault.png');
         $antoine = new User();
         $passwordAntoine = $this->encoder->encodePassword($martin, 'password');
         $antoine->setUsername('antoine')
@@ -232,6 +235,7 @@ class AppFixtures extends Fixture
             ->setCampus($campus)
             ->setActive(true)
             ->setAdmin(false);
+        $antoine->setPictureName('imageDefault.png');
         $campus->addUser($martin);
         $manager->persist($martin);
         $campus->addUser($antoine);

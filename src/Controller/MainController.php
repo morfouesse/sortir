@@ -18,6 +18,7 @@ class MainController extends AbstractController
     {
         $data = new SearchData();
 
+
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($r);
         $activities = $ar->findSearch($data);

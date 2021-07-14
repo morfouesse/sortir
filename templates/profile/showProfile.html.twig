@@ -9,6 +9,10 @@
         <div class="column is-half">
             <div class="box">
                 <h1 class="title has-text-centered">{{ user.username }}</h1>
+                <div class="has-text-centered">
+                    <img class="picture" src="{{ asset('build/images/' ~ user.pictureName ) }}"
+                         alt="{{ user.pictureName }}">
+                </div>
                 <div class="m-4">
                     <p><span class="subtitle">Prénom : </span><span>{{ user.firstName }}</span></p>
                 </div>
@@ -24,20 +28,19 @@
                 <div class="m-4">
                     <p><span class="subtitle">Campus : </span><span>{{ user.campus }}</span></p>
                 </div>
+                <div class="block pl-4">
+                    {% if app.user.username in user.username %}
 
-                {% if app.user.username in user.username %}
-                <div class="m-4">
-                    <a class="button is-link is-outlined" href="{{ path('profile_edit') }}">
-                        Modifier
-                    </a>
-                </div>
-                {% endif %}
+                        <a class="button is-link is-outlined" href="{{ path('profile_edit') }}">
+                            Modifier
+                        </a>
 
-                <div class="m-4">
-                    <a href="{{ path('main_index') }}">
-                        <button class="button is-link is-outlined">
-                            Retour
-                        </button>
+                    {% endif %}
+
+
+                    <a href="{{ path('main_index') }}"
+                       class="button is-link is-outlined">
+                        Retour
                     </a>
                 </div>
             </div>

@@ -88,6 +88,11 @@ class User implements UserInterface
      */
     private $roles = [];
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $pictureName;
+
 
     public function __construct()
     {
@@ -291,5 +296,17 @@ class User implements UserInterface
     public function eraseCredentials()
     {
 
+    }
+
+    public function getPictureName(): ?string
+    {
+        return $this->pictureName;
+    }
+
+    public function setPictureName(?string $pictureName): self
+    {
+        $this->pictureName = $pictureName;
+
+        return $this;
     }
 }
