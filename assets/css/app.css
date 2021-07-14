@@ -26,4 +26,9 @@ main{
     background: linear-gradient(45deg, rgba(213,0,125,0.8), rgba(229,57,53,0.8));
 }
 
+.picture{
+    height: auto;
+    max-width: 30%;
+}
+
 

@@ -55,7 +55,30 @@
                         </div>
                     </div>
 
+                    <div class="field is-horizontal m-4">
+                        <div class="field-label is-normal has-text-centered">
+                            <label class="label">Photo de profil</label>
+                        </div>
 
+                        <div class="field-body" id="download">
+                            <div class="file is-danger has-name is-boxed">
+                                <label class="file-label">
+                                    {{ form_widget(editProfileForm.pictureName) }}
+                                    <span class="file-cta">
+                                  <span class="file-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                  </span>
+                                  <span class="file-label">
+                                      Choisissez une image
+                                  </span>
+                                </span>
+                                    <span class="file-name">
+
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="m-4">
                         <button class="button is-link is-outlined is-fullwidth" type="submit">Valider</button>
                     </div>
