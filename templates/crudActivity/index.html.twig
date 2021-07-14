@@ -74,11 +74,10 @@
                                     {{ form_errors(form.inscriptionLimitDate) }}
                                 </div>
                             </div>
-{#                            <input class="button is-link is-outlined" id="state-open" type="submit" name="state" value="created">#}
-                            <button type="submit" class="button">Publier la sortie</button>
+{#                            <button type="submit" class="button">Publier la sortie</button>#}
                             {{ form_end(form) }}
                             <div class="field is-horizontal">
-                                <a href="{{ path('main_index') }}" class="button">Annuler</a>
+                                <a href="{{ path('main_index') }}" class="button is-link is-outlined">Annuler</a>
                             </div>
                         </div>
                     </div>

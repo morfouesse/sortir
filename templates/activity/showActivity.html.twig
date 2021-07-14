@@ -5,53 +5,146 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ activity.name }}</h1>
-    <div>Créateur : <a href="{{ path('profile_showProfile', {'id': activity.userOwner.id }) }}">{{ activity.userOwner.firstName }} {{ activity.userOwner.name }}</a> </div>
-    <div>Date et heure de la sortie : {{ activity.startDateTime | date('d/m/Y - h:m')}}</div>
-    <div>Date limite d'inscription : {{ activity.inscriptionLimitDate | date('d/m/Y') }}</div>
-    <div>Nombre de places : {{ activity.maxInscriptionsNb }} | (reste : {{ activity.maxInscriptionsNb - activity.users.count }})</div>
-    <div>Durée : {{ activity.duration }} heures</div>
-    <div>Description et infos : {{ activity.activityInfo }}</div>
-    <div>Campus : {{ activity.campus.name }}</div>
-    <div>Lieu : {{ activity.location.name }}</div>
-    <div>Rue : {{ activity.location.street }}</div>
-    <div>Ville : {{ activity.location.city.name }}</div>
-    <div>Code postal : {{ activity.location.city.postalCode }}</div>
-    <div>Latitude : {{ activity.location.latitude }}</div>
-    <div>Longitude : {{ activity.location.longitude }}</div>
+    <main>
+        <div class="column is-half">
+            <div class="box">
+                <h1 class="title has-text-centered">{{ activity.name }}</h1>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="m-4">
+                            <span class="subtitle">Créateur : </span>
+                            <span><a class="is-danger is-size-6"
+                                     href="{{ path('profile_showProfile', {'id': activity.userOwner.id }) }}">
+                                {{ activity.userOwner.firstName }} {{ activity.userOwner.name }}
+                            </a>
+                        </span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Date et heure de la sortie : </span>
+                            <span>{{ activity.startDateTime | date('d/m/Y - h:m') }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Date limite d'inscription : </span>
+                            <span>{{ activity.inscriptionLimitDate | date('d/m/Y') }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Nombre de places : </span>
+                            <span>{{ activity.maxInscriptionsNb }} | (reste : {{ activity.maxInscriptionsNb - activity.users.count }})</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Durée : </span>
+                            <span>{{ activity.duration }} minutes</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Description et infos : </span>
+                            <span>{{ activity.activityInfo }}</span>
+                        </div>
+                    </div>
+                    <div class="column auto">
+                        <div class="m-4">
+                            <span class="subtitle">Campus : </span>
+                            <span>{{ activity.campus.name }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Lieu : </span>
+                            <span>{{ activity.location.name }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Rue : </span>
+                            <span>{{ activity.location.street }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Ville : </span>
+                            <span>{{ activity.location.city.name }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Code postal : </span>
+                            <span>{{ activity.location.city.postalCode }}</span>
+                        </div>
 
-    <div>
-        <h2>Liste des participants</h2>
-        <ul>
-            {% for user in activity.users %}
-                <li>{{ user.username }} | {{ user.name }} {{ user.firstName }}</li>
-            {%  endfor %}
-        </ul>
-    </div>
+                        <div class="m-4">
+                            <span class="subtitle">Latitude : </span>
+                            <span>{{ activity.location.latitude }}</span>
+                        </div>
+                        <div class="m-4">
+                            <span class="subtitle">Longitude : </span>
+                            <span>{{ activity.location.longitude }}</span>
+                        </div>
+                    </div>
+                </div>
 
 
-{# TEST #}
-{#   <br><br>#}
-{#    {% for user in activity.users %}#}
-{#    {{ user.name }}#}
-{#    {% endfor %}#}
-{#    <br><br>#}
+                <div>
+                    <h2 class="title is-5 has-text-centered">Liste des participants</h2>
+                    <div class="columns">
+                        <div class="column is-offset-2">
+                            <ul>
+                                {% for user in activity.users %}
+                                    <li><a class="is-danger is-size-6"
+                                           href="{{ path('profile_showProfile', {'id': user.id }) }}">
+                                            {{ user.username }}
+                                        </a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <ul>
+                                {% for user in activity.users %}
+                                    <li><a class="is-danger is-size-6"
+                                           href="{{ path('profile_showProfile', {'id': user.id }) }}">
+                                            {{ user.name }} {{ user.firstName }}
+                                        </a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
+                {% if app.user in activity.users %}
+                    <div class="m-4">
+                        <a class="button is-link is-outlined" href="{{ path('activity_signOut', {'id': activity.id }) }}">
+                                Se désinscrire
+                        </a>
+                    </div>
+                {% elseif activity.state.label == 'open' %}
+                    <div class="m-4">
+                        <a class="button is-link is-outlined"
+                           href="{{ path('activity_signIn', {'id': activity.id }) }}">
+                            S'inscrire
+                        </a>
+                    </div>
+                {% endif %}
+                {% if app.user == activity.userOwner %}
+                    <div class="m-4">
+                        <a class="button is-link is-outlined"
+                           href="">
+                            Modifier
+                        </a>
+                    </div>
+                    <div class="m-4">
+                        <a class="button is-link is-outlined"
+                           href="">
+                            Supprimer
+                        </a>
+                    </div>
+                {% endif %}
+                {% if app.user == activity.userOwner and activity.state.label == 'created' %}
+                    <div class="m-4">
+                        <a class="button is-link is-outlined"
+                           href="">
+                            Publier
+                        </a>
+                    </div>
+                {% endif %}
 
-    {% if app.user in activity.users %}
-        <div>
-            <a href="{{ path('activity_signOut', {'id': activity.id }) }}">Se désinscrire</a>
+                <div class="m-4">
+                    <a class="button is-link is-outlined" href="{{ path('main_index') }}">
+                        Retour
+                    </a>
+                </div>
+            </div>
         </div>
-    {% else %}
-        <div>
-            <a href="{{ path('activity_signIn', {'id': activity.id }) }}">S'inscrire</a>
-        </div>
-    {% endif %}
-
-    <div>
-        <a href="{{ path('main_index') }}">Retour</a>
-    </div>
-
+    </main>
 {% endblock %}
 
 

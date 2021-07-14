@@ -26,7 +26,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/showProfile/{id}', name: 'profile_showProfile')]
+    #[Route('/profile/showProfile/{id}', name: 'profile_showProfile', requirements: ['id' => '\d+'])]
    public function showProfile(int $id, UserRepository $userRepository): Response{
        $user = $userRepository->find($id);
 

@@ -27,11 +27,19 @@ class CrudActivityController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
 
-            dd($cu->createActivity($form->getData()));
+            $stateToSet = $form->get('save')->isClicked()
+                ? 'created'
+                : 'open';
+
+            $id = $cu->createActivity($activity, $stateToSet);
+
+            $this->addFlash('success', 'La sortie a été créée');
+            return $this->redirectToRoute('activity_showActivity', [
+                'id' => $id
+            ]);
         }
 
-
-
+        $this->addFlash('error', 'Erreur à la création de la sortie');
         return $this->render('crudActivity/index.html.twig', [
             'form' => $form->createView(),
             'locations' => $locations,
