@@ -9,20 +9,31 @@ use App\Repository\StateRepository;
 class stateManagement
 {
 
-    public function setState(Activity $activity, StateRepository $stateRepository): Activity
+    private StateRepository $stateRepository;
+
+
+    public function __construct(StateRepository $stateRepository)
+    {
+        $this->stateRepository = $stateRepository;
+    }
+
+    public function setTheState(Activity $activity, string $stateToSet = '')
     {
 
-        $states = ['created' => $stateRepository->findOneBy(['label' => 'created']),
-            'open' => $stateRepository->findOneBy(['label' => 'open']),
-            'closed' => $stateRepository->findOneBy(['label' => 'closed']),
-            'onGoing' => $stateRepository->findOneBy(['label' => 'onGoing']),
-            'past' => $stateRepository->findOneBy(['label' => 'past']),
-            'canceled' => $stateRepository->findOneBy(['label' => 'canceled']),
-            'archieved' => $stateRepository->findOneBy(['label' => 'archieved']),
+        $states = ['created' => $this->stateRepository->findOneBy(['label' => 'created']),
+            'open' => $this->stateRepository->findOneBy(['label' => 'open']),
+            'closed' => $this->stateRepository->findOneBy(['label' => 'closed']),
+            'onGoing' => $this->stateRepository->findOneBy(['label' => 'onGoing']),
+            'past' => $this->stateRepository->findOneBy(['label' => 'past']),
+            'canceled' => $this->stateRepository->findOneBy(['label' => 'canceled']),
+            'archieved' => $this->stateRepository->findOneBy(['label' => 'archieved']),
         ];
 
-
-        if ($activity->getState() == $states['archieved']) {
+        if ($stateToSet === 'created'){
+            $activity->setState($states['created']);
+        } elseif ($stateToSet === 'open'){
+            $activity->setState($states['open']);
+        } elseif ($activity->getState() == $states['archieved']) {
         }
         if ($activity->getState() == $states['canceled'] || $activity->getState() == $states['past']) {
             if ($activity->getStartDateTime()->modify('+1 month') > new \DateTime('now')) {
@@ -43,7 +54,6 @@ class stateManagement
                 }
             }
         }
-        return $activity;
     }
 
 

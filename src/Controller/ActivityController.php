@@ -12,11 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ActivityController extends AbstractController
 {
-    #[Route('/activity/showActivity/{id}', name: 'activity_showActivity')]
-    public function showActivity(int $id, ActivityRepository $activityRepository): Response
+    #[Route('/activity/showActivity/{id}', name: 'activity_showActivity', requirements: ['id' => '\d+'])]
+    public function showActivity(int $id, ActivityRepository $activityRepository, stateManagement $stateManagement): Response
     {
         $activity = $activityRepository->find($id);
-        if (!$activity){
+        $stateManagement->setTheState($activity);
+
+        if (!$activity) {
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
 
@@ -25,17 +27,17 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/activity/signIn/{id}', name: 'activity_signIn')]
+    #[Route('/activity/signIn/{id}', name: 'activity_signIn', requirements: ['id' => '\d+'])]
     public function signIn(int $id, ActivityRepository $activityRepository,
-                            UserRepository $userRepository, EntityManagerInterface $manager,
-                            stateManagement $valid
+                           UserRepository $userRepository, EntityManagerInterface $manager,
+                           stateManagement $valid
     ): Response
     {
         $userId = $this->getUser()->getId();
         $user = $userRepository->find($userId);
 
         $activity = $activityRepository->find($id);
-        if (!$activity){
+        if (!$activity) {
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
 
@@ -47,19 +49,20 @@ class ActivityController extends AbstractController
             $manager->persist($activity);
             $manager->flush();
 
-            return $this->render('activity/showActivity.html.twig', [
-                'activity' => $activity
+            $this->addFlash('success', 'Vous êtes inscrit');
+
+            return $this->redirectToRoute('activity_showActivity', [
+                'id' => $activity->getId(),
             ]);
         } else {
-            $errorInscritpionDenied = 'Erreur : il n\'est plus possible de s\'inscrire à cette sortie';
+            $this->addFlash('error', 'Inscription impossible');
+            return $this->redirectToRoute('activity_showActivity', [
+                'id' => $activity->getId(),
+            ]);
         }
-        return $this->render('activity/showActivity.html.twig', [
-            'activity' => $activity,
-            'errorInscritpionDenied' => $errorInscritpionDenied
-        ]);
     }
 
-    #[Route('/activity/signOut/{id}', name: 'activity_signOut')]
+    #[Route('/activity/signOut/{id}', name: 'activity_signOut', requirements: ['id' => '\d+'])]
     public function signOut(int $id, ActivityRepository $activityRepository,
                             UserRepository $userRepository, EntityManagerInterface $manager): Response
     {
@@ -67,7 +70,7 @@ class ActivityController extends AbstractController
         $user = $userRepository->find($userId);
 
         $activity = $activityRepository->find($id);
-        if (!$activity){
+        if (!$activity) {
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
         $activity->removeUser($user);

@@ -25,7 +25,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/showProfile/{id}', name: 'profile_showProfile')]
+    #[Route('/profile/showProfile/{id}', name: 'profile_showProfile', requirements: ['id' => '\d+'])]
    public function showProfile(int $id, UserRepository $userRepository): Response{
        $user = $userRepository->find($id);
        if (!$user){
@@ -37,14 +37,14 @@ class ProfileController extends AbstractController
    }
 
     #[Route('/profile/edit', name: 'profile_edit')]
-    public function edit(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder, Request $request): Response
+    public function edit(EntityManagerInterface $entityManager, Request $request): Response
     {
         $editProfilForm = $this->createForm(EditProfileType::class, $this->getUser());
         $editProfilForm->handleRequest($request);
 
         if ($editProfilForm->isSubmitted() && $editProfilForm->isValid()){
-            $encodedPassword = $encoder->encodePassword($this->getUser(), $editProfilForm->get('plainPassword')->getData());
-            $this->getUser()->setPassword($encodedPassword);
+//            $encodedPassword = $encoder->encodePassword($this->getUser(), $editProfilForm->get('plainPassword')->getData());
+//            $this->getUser()->setPassword($encodedPassword);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
 

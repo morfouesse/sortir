@@ -60,7 +60,8 @@ class Activity
      * @Assert\Range(
      *      min = "now",
      *      max = "+1 years",
-     *      notInRangeMessage="la date actuelle au minimum et un an de plus au maximum"
+     *      minMessage="date actuelle au minimum",
+     *      maxMessage="Au plus tard dans 1 an"
      * )
      */
     private $inscriptionLimitDate;

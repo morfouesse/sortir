@@ -18,7 +18,7 @@
             </a>
 
             {% if app.user %}
-                <a class="navbar-item" href="{{ path('profile_myProfile') }}">
+                <a class="navbar-item" href="{{ path('profile_showProfile', {'id': app.user.id }) }}">
                     Mon profil
                 </a>
                 <a class="navbar-item" href="{{ path('crudActivity') }}">
