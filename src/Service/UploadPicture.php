@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploadPicture
 {
 
-    public function save(UploadedFile $image,String $directory) : String
+    public function save(?UploadedFile $image,String $directory) : String
     {
 
-        $newFilename = "fileNameByDefault.png";
+        $newFilename = "imageDefault.png";
 
         /**
          * @var UploadedFile $file

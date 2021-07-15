@@ -46,7 +46,7 @@ class ProfileController extends AbstractController
             // le temps d'afficher l'image correctement
             $entityManager->refresh($this->getUser());
 
-            $this->addFlash('success', 'Votre profil a bien été modifié');
+            $this->addFlash('notice', 'Votre profil a bien été modifié');
             return $this->redirectToRoute('profile_showProfile',['id' => $this->getUser()->getId()]);
         }
 
@@ -77,6 +77,7 @@ class ProfileController extends AbstractController
                 $this->getDoctrine()->getManager()->flush();
                 $this->getDoctrine()->getManager()->refresh($this->getUser());
 
+                $this->addFlash('notice', 'Votre mot de passe a été modifié');
                 return $this->redirectToRoute('profile_showProfile',['id' => $this->getUser()->getId()]);
             } else {
               $errorInvalidPassword = 'Erreur : mot de passe incorrect';

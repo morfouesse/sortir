@@ -89,8 +89,8 @@ global.$ = global.jQuery = $;
 
     /*==================================================================
     [ Validate ]*/
-    let name = $('.validate-input input[name="username"]');
-    let password = $('.validate-input input[name="password"]');
+    const name = $('.validate-input input[name="username"]');
+    const password = $('.validate-input input[name="password"]');
 
 
     $('.validate-form').on('submit', function () {

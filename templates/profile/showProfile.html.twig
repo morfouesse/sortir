@@ -7,6 +7,13 @@
 {% block body %}
     <main>
         <div class="column is-half">
+            {# Affichage des messages flash #}
+            {% for message in app.flashes('notice') %}
+                <div class="notification is-primary" id="notification">
+                    <button class="delete"></button>
+                    {{ message }}
+                </div>
+            {% endfor %}
             <div class="box">
                 <h1 class="title has-text-centered">{{ user.username }}</h1>
                 <div class="has-text-centered">
@@ -28,20 +35,22 @@
                 <div class="m-4">
                     <p><span class="subtitle">Campus : </span><span>{{ user.campus }}</span></p>
                 </div>
-                <div class="block pl-4">
+
+                <div class="block pl-4 columns has-text-centered">
                     {% if app.user.username in user.username %}
-
-                        <a class="button is-link is-outlined" href="{{ path('profile_edit') }}">
-                            Modifier
-                        </a>
-
+                        <div class="m-4 column">
+                            <a class="button is-link is-outlined" href="{{ path('profile_edit') }}">
+                                Modifier
+                            </a>
+                        </div>
                     {% endif %}
 
-
-                    <a href="{{ path('main_index') }}"
-                       class="button is-link is-outlined">
-                        Retour
-                    </a>
+                    <div class="m-4 column">
+                        <a href="{{ path('main_index') }}"
+                           class="button is-link is-outlined">
+                            Retour
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

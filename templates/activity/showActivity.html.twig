@@ -107,7 +107,7 @@
                     </div>
                 </div>
 
-                <div class="columns has-text-centered">
+                <div class="columns">
                     {% if activity.state.label == 'open' %}
                         {% if app.user in activity.users %}
                             <div class="m-4 column">
@@ -128,20 +128,20 @@
                     {% if app.user == activity.userOwner %}
                         <div class="m-4 column">
                             <a class="button is-link is-outlined"
-                               href="{{ path('activity_signOut', {'id': activity.id }) }}">
+                               href="{{ path('crud_modifyActivity', {'id': activity.id }) }}">
                                 Modifier
                             </a>
                         </div>
                         <div class="m-4 column">
                             <a class="button is-link is-outlined"
-                               href="">
+                               href="{{ path('crud_cancelActivity', {'id': activity.id }) }}">
                                 Annuler
                             </a>
                         </div>
                         {% if activity.state.label == 'created' %}
                             <div class="m-4 column">
                                 <a class="button is-link is-outlined"
-                                   href="{{ path('crudActivity_publish', {'id': activity.id}) }}">
+                                   href="{{ path('crud_publish', {'id': activity.id}) }}">
                                     Publier
                                 </a>
                             </div>

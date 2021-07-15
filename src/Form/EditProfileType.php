@@ -70,9 +70,10 @@ class EditProfileType extends AbstractType
                 FileType::class,
                 [
                     'mapped' => false,
+                    'required' => false,
                     'attr' => [
                         'class' => 'file-input',
-                        'name' => 'pictureName'
+                        'name' => 'pictureName',
                     ],
                     'constraints' => [
                         new Image(
@@ -83,8 +84,7 @@ class EditProfileType extends AbstractType
                         ),
                     ],
                 ]
-            )
-        ;
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

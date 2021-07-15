@@ -132,9 +132,9 @@
                                             {% endif %}
                                         {% endif %}
                                         {% if app.user == item.userOwner %}
-                                            <a href="{{ path('modifyActivity', {'id': item.id }) }}" class="card-footer-item">Modifier</a>
+                                            <a href="{{ path('crud_modifyActivity', {'id': item.id }) }}" class="card-footer-item">Modifier</a>
                                             {% if item.state.label == 'created' %}
-                                                <a href="{{ path('crudActivity_publish', {'id': item.id}) }}"
+                                                <a href="{{ path('crud_publish', {'id': item.id}) }}"
                                                    class="card-footer-item">Publier</a>
                                             {% endif %}
                                         {% endif %}

@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\Activity;
 use App\Entity\State;
 use App\Repository\StateRepository;
+use DateTime;
 
 class stateManagement
 {
@@ -37,50 +38,39 @@ class stateManagement
         if ($states == null) {
             $states = $this->states;
         }
-        $state = $states[6];
-
-        if ($stateToSet == 'created') {
-            $state = $states[0];
-        } elseif ($stateToSet == 'open') {
+        $state = $states[0];
+       if ($stateToSet == 'open') {
             $state = $states[1];
-        }
-//        elseif ($stateToSet === 'fixtures') {
-//            $rd = random_int(0, 100);
-//            if ($rd < 15) {
-//                $state = $states[5];
-//            } elseif ($rd < 45) {
-//                $state = $states[0];
-//            } else {
-//                $state = $states[1];
-//            }
-//        }
-        if ($activity->getState() == $states[1] || $activity->getState() == $states[2] || $activity->getState() == null) {
-            if ($this->activityOnGoing($activity)) {
-                $state = $states[3];
-            } else if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {
-                $state = $states[1];
-            } else {
-                $state = $states[2];
-            }
-            if ($stateToSet == 'fixtures') {
-                $rd3 = random_int(0, 100);
-                if ($rd3 < 15) {
-                    $state = $states[5];
+        } else {
+
+            if ($activity->getState() == $states[1] || $activity->getState() == $states[2] || $activity->getState() == null) {
+                if ($this->activityOnGoing($activity)) {
+                    $state = $states[3];
+                } else if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {
+                    $state = $states[1];
+                } else {
+                    $state = $states[2];
+                }
+                if ($stateToSet == 'fixtures') {
+                    $rd3 = random_int(0, 100);
+                    if ($rd3 < 15) {
+                        $state = $states[5];
+                    }
                 }
             }
-        }
-        if ($this->activityPast($activity)) {
-            $state = $states[4];
-            if ($stateToSet == 'fixtures') {
-                $rd2 = random_int(0, 100);
-                if ($rd2 < 15) {
-                    $state = $states[5];
+            if ($this->activityPast($activity)) {
+                $state = $states[4];
+                if ($stateToSet == 'fixtures') {
+                    $rd2 = random_int(0, 100);
+                    if ($rd2 < 15) {
+                        $state = $states[5];
+                    }
                 }
             }
-        }
-        if ($activity->getState() == $states[5] || $activity->getState() == $states[4]) {
-            if ($this->activityArchieved($activity)) {
-                $state = $states[6];
+            if ($activity->getState() == $states[5] || $activity->getState() == $states[4]) {
+                if ($this->activityArchieved($activity)) {
+                    $state = $states[6];
+                }
             }
         }
         return $state;
@@ -107,7 +97,7 @@ class stateManagement
     public
     function limitDateNotPassed(Activity $activity): bool
     {
-        return $activity->getInscriptionLimitDate() > new \DateTime('now');
+        return $activity->getInscriptionLimitDate() > new DateTime('now');
     }
 
     public
@@ -118,23 +108,23 @@ class stateManagement
 
     public function startDateIsNotPassed(Activity $activity): bool
     {
-        return $activity->getStartDateTime() > new \DateTime('now');
+        return $activity->getStartDateTime() > new DateTime('now');
     }
 
     public function activityOnGoing(Activity $activity): bool
     {
-        return $activity->getStartDateTime() < new \DateTime('now')
-            && $activity->getStartDateTime()->modify('+' . $activity->getDuration() . ' minute') > new \DateTime('now');
+        return $activity->getStartDateTime() < new DateTime('now')
+            && $activity->getStartDateTime()->modify('+' . $activity->getDuration() . ' minute') > new DateTime('now');
     }
 
     public function activityPast(Activity $activity): bool
     {
-        return $activity->getStartDateTime()->modify('+' . $activity->getDuration() . ' minute') < new \DateTime('now');
+        return $activity->getStartDateTime()->modify('+' . $activity->getDuration() . ' minute') < new DateTime('now');
     }
 
     public function activityArchieved(Activity $activity): bool
     {
-        return $activity->getStartDateTime()->modify('+1 month') < new \DateTime('now');
+        return $activity->getStartDateTime()->modify('+1 month') < new DateTime('now');
     }
 
 }

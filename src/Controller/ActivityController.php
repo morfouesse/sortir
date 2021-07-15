@@ -46,17 +46,12 @@ class ActivityController extends AbstractController
             $manager->persist($activity);
             $manager->flush();
 
-            $this->addFlash('success', 'Vous êtes inscrit');
+            $this->addFlash('notice', 'Vous êtes inscrit');
 
-            return $this->redirectToRoute('activity_showActivity', [
-                'id' => $activity->getId(),
-            ]);
-        } else {
-            $this->addFlash('error', 'Inscription impossible');
-            return $this->redirectToRoute('activity_showActivity', [
-                'id' => $activity->getId(),
-            ]);
         }
+            return $this->redirectToRoute('activity_showActivity', [
+                'id' => $activity->getId(),
+            ]);
     }
 
     #[Route('/activity/signOut/{id}', name: 'activity_signOut', requirements: ['id' => '\d+'])]
@@ -77,6 +72,7 @@ class ActivityController extends AbstractController
         $manager->persist($activity);
         $manager->flush();
 
+        $this->addFlash('notice', 'Vous êtes désinscrit');
         return $this->render('activity/showActivity.html.twig', [
             'activity' => $activity
         ]);
