@@ -15,16 +15,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile/myProfile', name: 'profile_myProfile')]
-    public function myProfile(): Response{
-        $user = $this->getUser();
 
-
-
-        return $this->render('profile/myProfile.html.twig', [
-            'user' => $user
-        ]);
-    }
 
     #[Route('/profile/showProfile/{id}', name: 'profile_showProfile', requirements: ['id' => '\d+'])]
    public function showProfile(int $id, UserRepository $userRepository): Response{
@@ -37,15 +28,12 @@ class ProfileController extends AbstractController
 
     #[Route('/profile/edit', name: 'profile_edit')]
     public function edit(EntityManagerInterface $entityManager,
-        UserPasswordEncoderInterface $encoder,
         Request $request, UploadPicture $uploadPicture): Response
     {
         $editProfilForm = $this->createForm(EditProfileType::class, $this->getUser());
         $editProfilForm->handleRequest($request);
 
         if ($editProfilForm->isSubmitted() && $editProfilForm->isValid()){
-       //     $encodedPassword = $encoder->encodePassword($this->getUser(), $editProfilForm->get('plainPassword')->getData());
-        //    $this->getUser()->setPassword($encodedPassword);
 
             $pictureName = $editProfilForm->get('pictureName')->getData();
             $pictureNewFileName = $uploadPicture->save(
@@ -89,7 +77,7 @@ class ProfileController extends AbstractController
                 $this->getDoctrine()->getManager()->flush();
                 $this->getDoctrine()->getManager()->refresh($this->getUser());
 
-                return $this->redirectToRoute('profile_myProfile');
+                return $this->redirectToRoute('profile_showProfile',['id' => $this->getUser()->getId()]);
             } else {
               $errorInvalidPassword = 'Erreur : mot de passe incorrect';
             }

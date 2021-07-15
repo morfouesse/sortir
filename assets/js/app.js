@@ -10,6 +10,19 @@ require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
 import '../css/app.css';
 
+if(document.getElementById('notification')){
+    document.addEventListener('DOMContentLoaded', () => {
+        (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+            const $notification = $delete.parentNode;
+
+            $delete.addEventListener('click', () => {
+                $notification.parentNode.removeChild($notification);
+            });
+        });
+    });
+}
+
+
 if(document.getElementById('download')) {
     document.addEventListener('DOMContentLoaded', () => {
         // 1. Display file name when select file
