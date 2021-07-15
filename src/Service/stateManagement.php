@@ -32,54 +32,55 @@ class stateManagement
 
     public function setTheState(Activity $activity, string $stateToSet = '', array $states = []): State
     {
-//        dd($this->activityArchieved($activity));
+//        dd($this->canSignIn($activity));
 
-        if ($states == null){
+        if ($states == null) {
             $states = $this->states;
         }
         $state = $states[6];
 
-        if ($stateToSet === 'created') {
+        if ($stateToSet == 'created') {
             $state = $states[0];
-        } elseif ($stateToSet === 'open') {
+        } elseif ($stateToSet == 'open') {
             $state = $states[1];
-        } elseif ($stateToSet === 'fixtures') {
-            $rd = random_int(0, 100);
-            if ($rd < 15) {
-                $state = $states[5];
-            } elseif ($rd < 45) {
-                $state = $states[0];
-            } else {
-                $state = $states[1];
-            }
         }
-        if ($activity->getState() == $states[5] || $activity->getState() == $states[4] || $stateToSet === 'fixtures') {
-            if ($this->activityArchieved($activity)) {
-                $state = $states[6];
+//        elseif ($stateToSet === 'fixtures') {
+//            $rd = random_int(0, 100);
+//            if ($rd < 15) {
+//                $state = $states[5];
+//            } elseif ($rd < 45) {
+//                $state = $states[0];
+//            } else {
+//                $state = $states[1];
+//            }
+//        }
+        if ($activity->getState() == $states[1] || $activity->getState() == $states[2] || $activity->getState() == null) {
+            if ($this->activityOnGoing($activity)) {
+                $state = $states[3];
+            } else if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {
+                $state = $states[1];
+            } else {
+                $state = $states[2];
             }
-        } elseif ($this->activityPast($activity) || $stateToSet === 'fixtures') {
-            $state = $states[4];
-            if ($stateToSet === 'fixtures') {
-                $rd2 = random_int(0, 100);
-                if ($rd2 < 25) {
+            if ($stateToSet == 'fixtures') {
+                $rd3 = random_int(0, 100);
+                if ($rd3 < 15) {
                     $state = $states[5];
                 }
             }
-        } elseif ($activity->getState() == $states[1] || $activity->getState() == $states[2] || $stateToSet === 'fixtures') {
-            if ($this->activityOnGoing($activity)) {
-                $state = $states[3];
-            } else {
-                if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {
-                    $state = $states[1];
-                } else {
-                    $state = $states[2];
+        }
+        if ($this->activityPast($activity)) {
+            $state = $states[4];
+            if ($stateToSet == 'fixtures') {
+                $rd2 = random_int(0, 100);
+                if ($rd2 < 15) {
+                    $state = $states[5];
                 }
-                if ($stateToSet === 'fixtures') {
-                    $rd3 = random_int(0, 100);
-                    if ($rd3 < 75) {
-                        $state = $states[5];
-                    }
-                }
+            }
+        }
+        if ($activity->getState() == $states[5] || $activity->getState() == $states[4]) {
+            if ($this->activityArchieved($activity)) {
+                $state = $states[6];
             }
         }
         return $state;
@@ -106,7 +107,7 @@ class stateManagement
     public
     function limitDateNotPassed(Activity $activity): bool
     {
-        return $activity->getInscriptionLimitDate() < new \DateTime('now');
+        return $activity->getInscriptionLimitDate() > new \DateTime('now');
     }
 
     public

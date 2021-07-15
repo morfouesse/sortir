@@ -29,7 +29,7 @@
                         </div>
                         <div class="m-4">
                             <span class="subtitle">Nombre de places : </span>
-                            <span>{{ activity.maxInscriptionsNb }} | (reste : {{ activity.maxInscriptionsNb - activity.users.count }})</span>
+                            <span>{{ activity.maxInscriptionsNb }} (reste : {{ activity.maxInscriptionsNb - activity.users.count }})</span>
                         </div>
                         <div class="m-4">
                             <span class="subtitle">Durée : </span>
@@ -121,7 +121,7 @@
                     {% if app.user == activity.userOwner %}
                         <div class="m-4 column">
                             <a class="button is-link is-outlined"
-                               href="">
+                               href="{{ path('activity_signOut', {'id': activity.id }) }}">
                                 Modifier
                             </a>
                         </div>
