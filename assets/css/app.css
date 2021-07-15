@@ -32,3 +32,40 @@ main{
 }
 
 
+.card {
+    transition: 0.2s ease-in, 0.3s ease-out, border-width 100ms linear;
+    border-color: white;
+}
+
+.card:hover {
+    transform: scale(1.04);
+    border-radius: 10px;
+    border: 12px solid rgb(232, 192, 194);
+}
+
+.card-footer-item, .link{
+    /*transition: 2ms ease-in, 2s ease-out;*/
+    color: rgba(219,21,99,0.8);
+    font-size: medium;
+    border-color: #eee0a9;
+}
+
+.card-footer-item:hover {
+    transition: 0.1s ease-in;
+    color: rgba(74, 49, 163, 0.8);
+    background-color: #f1eddc;
+    font-weight: bold;
+    border: 2px solid #efe5be;
+}
+
+.link:hover {
+    color: rgba(74, 49, 163, 0.8);
+}
+
+.card {
+    background-color: #f5f4f1;
+}
+
+.navbar, .footer{
+    background-color: #f1eddc;
+}

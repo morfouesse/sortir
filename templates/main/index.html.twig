@@ -4,9 +4,9 @@
 
 {% block body %}
     <main>
+        <div class="columns is-desktop is-multiline">
         {# filtre #}
-        <div class="columns">
-            <div class="column sidebar">
+            <div class="column mt-5 is-desktop is-variable is-half-desktop is-offset-one-quarter-desktop">
                 {{ form_start(form, { 'attr': {'id': 'filter'}}) }}
                 <nav class="panel">
                     <p class="panel-heading">
@@ -72,44 +72,43 @@
                 {{ form_end(form) }}
             </div>
             {# card #}
-            <div class="columns is-multiline p-6">
+            <div class="columns is-multiline p-6 is-variable is-6-desktop">
                 {% for item in activities %}
                     {% if item.state.label != 'archived' %}
                         {% if not (item.state.label == 'created' and app.user != item.userOwner) %}
-                            <div class="column is-4-desktop is-12-tablet is-12-mobile">
-                                <div class="card">
-                                    <div class="card-image">
-                                        <figure class="image is-4">
-                                            <img src="https://bulma.io/images/placeholders/1280x960.png"
-                                                 alt="Placeholder image">
-                                        </figure>
-                                    </div>
+                            <div class="column is-4-desktop is-12-tablet">
+                                <div class="card hovered">
                                     <div class="card-content">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <figure class="image is-48x48">
-                                                    <img src="https://bulma.io/images/placeholders/96x96.png"
-                                                         alt="Placeholder image">
-                                                </figure>
+                                        <div class="media has-text-centered">
+                                            <div class="media-left m-0">
+                                                <a href="{{ path('profile_showProfile', {'id': item.userOwner.id }) }}">
+                                                    <figure class="image is-48x48">
+                                                        <img src="{{ asset('build/images/' ~ item.userOwner.pictureName ) }}"
+                                                             alt="Placeholder image">
+                                                    </figure>
+                                                    <p class="subtitle is-5 m-0"><a class="link"
+                                                                href="{{ path('profile_showProfile', {'id': item.userOwner.id }) }}">{{ item.userOwner.username }}</a>
+                                                    </p>
+                                                </a>
                                             </div>
-                                            <div class="media-content">
-                                                <p class="title is-4"><a
-                                                            href="{{ path('activity_showActivity', {'id': item.id }) }}">{{ item.name }}</a>
-                                                </p>
-                                                <p class="subtitle is-6"><a
-                                                            href="{{ path('profile_showProfile', {'id': item.userOwner.id }) }}">{{ item.userOwner.username }}</a>
-                                                </p>
+                                            <div class="media-content m-2">
+                                                <a href="{{ path('activity_showActivity', {'id': item.id }) }}">
+                                                    <p class="title is-5">{{ item.name }}</p>
+                                                </a>
                                             </div>
-                                            <div class="media-right">
-                                                <p>{{ item.users.count }} / {{ item.maxInscriptionsNb }}</p>
-                                                <p>{{ item.state.label }}</p>
+                                            <div class="media-right m-2">
+                                                <a href="{{ path('activity_showActivity', {'id': item.id }) }}">
+                                                    <p>{{ item.users.count }} / {{ item.maxInscriptionsNb }}</p>
+                                                    <p>{{ item.state.label }}</p>
+                                                </a>
                                             </div>
                                         </div>
 
-                                        <div class="content">
-                                            <p>
-                                                {{ item.activityInfo }}
-                                            </p>
+                                        <a class="content" href="{{ path('activity_showActivity', {'id': item.id }) }}">
+                                            <div class="m-0">
+                                                <p>
+                                                    {{ item.activityInfo }}
+                                                </p>
                                             <p class="subtitle is-6">
                                                 Commence le:
                                                 {{ item.startDateTime | date('d/m/Y') }}
@@ -117,7 +116,8 @@
                                                 Fin des inscriptions:
                                                 {{ item.inscriptionLimitDate | date('d/m/Y') }}
                                             </p>
-                                        </div>
+                                            </div>
+                                        </a>
                                     </div>
                                     <footer class="card-footer">
                                         <a href="{{ path('activity_showActivity', {'id': item.id }) }}"
@@ -132,14 +132,16 @@
                                             {% endif %}
                                         {% endif %}
                                         {% if app.user == item.userOwner %}
-                                            <a href="{{ path('crud_modifyActivity', {'id': item.id }) }}" class="card-footer-item">Modifier</a>
+                                            <a href="{{ path('crud_modifyActivity', {'id': item.id }) }}"
+                                               class="card-footer-item">Modifier</a>
                                             {% if item.state.label == 'created' %}
                                                 <a href="{{ path('crud_publish', {'id': item.id}) }}"
                                                    class="card-footer-item">Publier</a>
                                             {% endif %}
                                         {% endif %}
                                         {% if item.state.label == 'past' %}
-                                            <p class="card-footer-item has-text-centered">oh non la sortie est finie
+                                            <p class="card-footer-item has-text-centered">oh non la sortie est
+                                                finie
                                                 &#128552;</p>
                                         {% endif %}
                                     </footer>

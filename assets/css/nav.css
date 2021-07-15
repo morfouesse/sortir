@@ -9,6 +9,25 @@
 }
 
 .panel{
-    background-color: white;
+    background-color: #f5f4f1;
 }
 
+.panel-heading{
+    background-color: #f1ebd3;
+}
+
+.link {
+    font-weight: bold;
+}
+
+.disconnect {
+    color: rgba(219,21,99,0.8);
+    font-weight: bold;
+    font-size: medium;
+}
+
+.disconnect:hover {
+    transition: 0.1s ease-in;
+    color: rgba(74, 49, 163, 0.8);
+    font-weight: bold;
+}

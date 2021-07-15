@@ -107,17 +107,17 @@
                     </div>
                 </div>
 
-                <div class="columns">
+                <div class="columns is-variable is-0-mobile is-0-tablet is-3desktop has-text-centered">
                     {% if activity.state.label == 'open' %}
                         {% if app.user in activity.users %}
-                            <div class="m-4 column">
+                            <div class="column">
                                 <a class="button is-link is-outlined"
                                    href="{{ path('activity_signOut', {'id': activity.id }) }}">
                                     Se désinscrire
                                 </a>
                             </div>
                         {% else %}
-                            <div class="m-4 column">
+                            <div class="column">
                                 <a class="button is-link is-outlined"
                                    href="{{ path('activity_signIn', {'id': activity.id }) }}">
                                     S'inscrire
@@ -126,20 +126,20 @@
                         {% endif %}
                     {% endif %}
                     {% if app.user == activity.userOwner %}
-                        <div class="m-4 column">
+                        <div class="column">
                             <a class="button is-link is-outlined"
                                href="{{ path('crud_modifyActivity', {'id': activity.id }) }}">
                                 Modifier
                             </a>
                         </div>
-                        <div class="m-4 column">
+                        <div class="column">
                             <a class="button is-link is-outlined"
                                href="{{ path('crud_cancelActivity', {'id': activity.id }) }}">
                                 Annuler
                             </a>
                         </div>
                         {% if activity.state.label == 'created' %}
-                            <div class="m-4 column">
+                            <div class="column">
                                 <a class="button is-link is-outlined"
                                    href="{{ path('crud_publish', {'id': activity.id}) }}">
                                     Publier
@@ -148,7 +148,7 @@
                         {% endif %}
                     {% endif %}
 
-                    <div class="m-4 column">
+                    <div class="column">
                         <a class="button is-link is-outlined" href="{{ path('main_index') }}">
                             Retour
                         </a>

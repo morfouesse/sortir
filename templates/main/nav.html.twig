@@ -4,7 +4,7 @@
             <img class="logo" src="{{ asset('build/images/Logo_Par_ici_la_Sortie.png') }}" alt="logo sortir">
         </a>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <a role="button" class="navbar-burger link" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -13,15 +13,15 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item" href="{{ path('main_index') }}">
+            <a class="navbar-item link" href="{{ path('main_index') }}">
                 Accueil
             </a>
 
             {% if app.user %}
-                <a class="navbar-item" href="{{ path('profile_showProfile', {'id': app.user.id }) }}">
+                <a class="navbar-item link" href="{{ path('profile_showProfile', {'id': app.user.id }) }}">
                     Mon profil
                 </a>
-                <a class="navbar-item" href="{{ path('crud_createActivity') }}">
+                <a class="navbar-item link" href="{{ path('crud_createActivity') }}">
                     Crée une sortie !
                 </a>
             {% endif %}
@@ -29,13 +29,9 @@
         </div>
         {% if app.user %}
             <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-light" href="{{ path('app_logout') }}" title="Logout">
-                            Se déconnecter
-                        </a>
-                    </div>
-                </div>
+                <a class="navbar-item link" href="{{ path('app_logout') }}" title="Logout">
+                    Se déconnecter
+                </a>
             </div>
         {% endif %}
     </div>

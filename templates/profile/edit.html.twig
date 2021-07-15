@@ -6,7 +6,7 @@
     <main>
         <div class="column is-half">
             <div class="py-6">
-                <div class="box">
+                <div class="box my-6">
                     <h1 class="title has-text-centered">Editer mon profil</h1>
                     {{ form_start(editProfileForm) }}
 
@@ -79,20 +79,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="m-4">
-                        <button class="button is-link is-outlined is-fullwidth" type="submit">Valider</button>
-                    </div>
-                    {{ form_end(editProfileForm) }}
+                    <div class="columns is-variable is-0-mobile is-0-tablet is-3desktop has-text-centered">
+                        <div class="column">
+                            <button class="button is-link is-outlined is-fullwidth" type="submit">Valider</button>
+                        </div>
 
+                        {{ form_end(editProfileForm) }}
 
-                    <div class="m-4 mt-6">
-                        <a href="{{ path('profile_changePassword') }}">
-                            <button class="button is-link is-outlined">
+                        <div class="column">
+                            <a class="button is-link is-outlined" href="{{ path('profile_changePassword') }}">
                                 Modifier le mot de passe
-                            </button>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
