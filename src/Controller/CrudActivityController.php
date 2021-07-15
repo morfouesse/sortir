@@ -7,6 +7,7 @@ use App\Form\CrudActivityType;
 use App\Repository\ActivityRepository;
 use App\Repository\LocationRepository;
 use App\Service\Crud\ActivityAsAUser;
+use App\Service\stateManagement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,4 +78,23 @@ class CrudActivityController extends AbstractController
 
         ]);
     }
+
+    #[Route('/crud/publish/{id}', name: 'crudActivity_publish', requirements: ['id' => '\d+'])]
+    public function publish(int $id, ActivityRepository $activityRepository,
+                            stateManagement $stateManagement, EntityManagerInterface $entityManager
+    ): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+
+        $activity = $activityRepository->find($id);
+        $stateManagement->setTheState($activity, 'open');
+        $entityManager->persist($activity);
+        $entityManager->flush();
+
+        $this->addFlash('error', 'Votre sortie à été publiée');
+        return $this->redirectToRoute('activity_showActivity', [
+            'id' => $id
+        ]);
+    }
+
+
 }

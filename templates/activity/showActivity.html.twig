@@ -28,7 +28,7 @@
                         </div>
                         <div class="m-4">
                             <span class="subtitle">Date et heure de la sortie : </span>
-                            <span>{{ activity.startDateTime | date('d/m/Y - h:m') }}</span>
+                            <span>{{ activity.startDateTime | date('d/m/Y - H:i') }}</span>
                         </div>
                         <div class="m-4">
                             <span class="subtitle">Date limite d'inscription : </span>
@@ -107,47 +107,52 @@
                     </div>
                 </div>
 
-                {% if app.user in activity.users %}
-                    <div class="m-4">
-                        <a class="button is-link is-outlined" href="{{ path('activity_signOut', {'id': activity.id }) }}">
-                                Se désinscrire
-                        </a>
-                    </div>
-                {% elseif activity.state.label == 'open' %}
-                    <div class="m-4">
-                        <a class="button is-link is-outlined"
-                           href="{{ path('activity_signIn', {'id': activity.id }) }}">
-                            S'inscrire
-                        </a>
-                    </div>
-                {% endif %}
-                {% if app.user == activity.userOwner %}
-                    <div class="m-4">
-                        <a class="button is-link is-outlined"
-                           href="{{ path('modifyActivity', {'id': activity.id }) }}">
-                            Modifier
-                        </a>
-                    </div>
-                    <div class="m-4">
-                        <a class="button is-link is-outlined"
-                           href="">
-                            Supprimer
-                        </a>
-                    </div>
-                {% endif %}
-                {% if app.user == activity.userOwner and activity.state.label == 'created' %}
-                    <div class="m-4">
-                        <a class="button is-link is-outlined"
-                           href="">
-                            Publier
-                        </a>
-                    </div>
-                {% endif %}
+                <div class="columns has-text-centered">
+                    {% if activity.state.label == 'open' %}
+                        {% if app.user in activity.users %}
+                            <div class="m-4 column">
+                                <a class="button is-link is-outlined"
+                                   href="{{ path('activity_signOut', {'id': activity.id }) }}">
+                                    Se désinscrire
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="m-4 column">
+                                <a class="button is-link is-outlined"
+                                   href="{{ path('activity_signIn', {'id': activity.id }) }}">
+                                    S'inscrire
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    {% if app.user == activity.userOwner %}
+                        <div class="m-4 column">
+                            <a class="button is-link is-outlined"
+                               href="">
+                                Modifier
+                            </a>
+                        </div>
+                        <div class="m-4 column">
+                            <a class="button is-link is-outlined"
+                               href="">
+                                Annuler
+                            </a>
+                        </div>
+                        {% if activity.state.label == 'created' %}
+                            <div class="m-4 column">
+                                <a class="button is-link is-outlined"
+                                   href="{{ path('crudActivity_publish', {'id': activity.id}) }}">
+                                    Publier
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
 
-                <div class="m-4">
-                    <a class="button is-link is-outlined" href="{{ path('main_index') }}">
-                        Retour
-                    </a>
+                    <div class="m-4 column">
+                        <a class="button is-link is-outlined" href="{{ path('main_index') }}">
+                            Retour
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

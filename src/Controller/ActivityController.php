@@ -13,14 +13,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActivityController extends AbstractController
 {
     #[Route('/activity/showActivity/{id}', name: 'activity_showActivity', requirements: ['id' => '\d+'])]
-    public function showActivity(int $id, ActivityRepository $activityRepository, stateManagement $stateManagement): Response
+    public function showActivity(int $id, ActivityRepository $activityRepository,
+                                 stateManagement $stateManagement, EntityManagerInterface $entityManager): Response
     {
         $activity = $activityRepository->find($id);
-        $stateManagement->setTheState($activity);
-
-        if (!$activity) {
-            throw $this->createNotFoundException('Cette sortie n\'existe pas');
-        }
+        $activity->setState($stateManagement->setTheState($activity));
+        $entityManager->persist($activity);
+        $entityManager->flush();
 
         return $this->render('activity/showActivity.html.twig', [
             'activity' => $activity
@@ -37,9 +36,7 @@ class ActivityController extends AbstractController
         $user = $userRepository->find($userId);
 
         $activity = $activityRepository->find($id);
-        if (!$activity) {
-            throw $this->createNotFoundException('Cette sortie n\'existe pas');
-        }
+
 
         if ($valid->canSignIn($activity)) {
             $activity->addUser($user);
