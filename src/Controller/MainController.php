@@ -25,12 +25,12 @@ class MainController extends AbstractController
         $form->handleRequest($r);
 
         $activities = $ar->findSearch($data);
-        foreach ($activities as $activity){
+     /*   foreach ($activities as $activity){
             $activity->setState($sm->setTheState($activity));
             $em->persist($activity);
             $em->refresh($activity);
         }
-        $em->flush();
+        $em->flush();*/
 
 
         return $this->render('main/index.html.twig',
