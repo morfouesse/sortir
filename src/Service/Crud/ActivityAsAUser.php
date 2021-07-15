@@ -33,7 +33,7 @@ class ActivityAsAUser
         $activity->setCampus($this->s->getUser()->getCampus());
         $activity->setUserOwner($this->s->getUser());
 
-        $this->sm->setTheState($activity, $stateToSet);
+        $activity->setState($this->sm->setTheState($activity, $stateToSet));
 
         $this->em->persist($activity);
         $this->em->flush();

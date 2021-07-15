@@ -46,7 +46,7 @@ class Activity
      * )
      * @Assert\Range(
      *      min=3,
-     *      max= 60,
+     *      max= 1439,
      *      notInRangeMessage="Minimum {{ min }} minutes et {{ max }} minutes maximum",
      * )
      */

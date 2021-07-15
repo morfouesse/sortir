@@ -14,6 +14,7 @@ use App\Repository\CityRepository;
 use App\Repository\LocationRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
+use App\Service\stateManagement;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
@@ -29,6 +30,7 @@ class AppFixtures extends Fixture
     private EntityRepository $stateRepository;
     private EntityRepository $userRepository;
     private EntityRepository $activityRepository;
+    private stateManagement $stateManagement;
 
     private const NB_CITIES = 20;
     private const NB_LOCATIONS = 30;
@@ -39,8 +41,9 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordEncoderInterface $encoder, CampusRepository $campusRepository,
                                 CityRepository $cityRepository, LocationRepository $locationRepository,
                                 StateRepository $stateRepository, UserRepository $userRepository,
-                                ActivityRepository $activityRepository,
-                                ){
+                                ActivityRepository $activityRepository, stateManagement $stateManagement
+    )
+    {
         $this->encoder = $encoder;
         $this->campusRepository = $campusRepository;
         $this->cityRepository = $cityRepository;
@@ -48,6 +51,7 @@ class AppFixtures extends Fixture
         $this->stateRepository = $stateRepository;
         $this->userRepository = $userRepository;
         $this->activityRepository = $activityRepository;
+        $this->stateManagement = $stateManagement;
     }
 
     public function load(ObjectManager $manager)
@@ -63,7 +67,8 @@ class AppFixtures extends Fixture
 
     }
 
-    private function fixCampuses(ObjectManager $manager){
+    private function fixCampuses(ObjectManager $manager)
+    {
         $campus1 = new Campus();
         $campus1->setName('Saint-Herblain');
         $campus2 = new Campus();
@@ -78,10 +83,11 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function fixCities(ObjectManager $manager){
+    private function fixCities(ObjectManager $manager)
+    {
         $generator = Factory::create('fr_FR');
 
-        for ($i = 0; $i < self::NB_CITIES; $i++){
+        for ($i = 0; $i < self::NB_CITIES; $i++) {
             $city = new City();
             $city->setName($generator->city)
                 ->setPostalCode($generator->randomNumber(5));
@@ -96,12 +102,12 @@ class AppFixtures extends Fixture
         $cities = $this->cityRepository->findAll();
 
         for ($i = 0; $i <= self::NB_LOCATIONS; $i++) {
-            $city = $cities[$generator->numberBetween(0, count($cities)-1)];
+            $city = $cities[$generator->numberBetween(0, count($cities) - 1)];
             $location = new Location();
-            $location->setName('lieu n°'.$i)
+            $location->setName('lieu n°' . $i)
                 ->setStreet($generator->streetAddress)
-                ->setLatitude($generator->randomFloat(6,0, 9))
-                ->setLongitude($generator->randomFloat(6,0, 9))
+                ->setLatitude($generator->randomFloat(6, 0, 9))
+                ->setLongitude($generator->randomFloat(6, 0, 9))
                 ->setCity($city);
             $manager->persist($location);
 
@@ -111,8 +117,9 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function fixStates(ObjectManager $manager){
-        for ($i = 0; $i < 7; $i++){
+    private function fixStates(ObjectManager $manager)
+    {
+        for ($i = 0; $i < 7; $i++) {
             $state = new State();
             $state->setLabel(State::TAB_LABEL[$i]);
             $manager->persist($state);
@@ -120,14 +127,15 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function fixUsers(ObjectManager $manager){
+    private function fixUsers(ObjectManager $manager)
+    {
         $generator = Factory::create('fr_FR');
         $campuses = $this->campusRepository->findAll();
 
-        for ($i = 0; $i < self::NB_USERS; $i++){
-            $campus = $campuses[$generator->numberBetween(0, count($campuses)-1)];
+        for ($i = 0; $i < self::NB_USERS; $i++) {
+            $campus = $campuses[$generator->numberBetween(0, count($campuses) - 1)];
             $user = new User();
-            $password = $this->encoder->encodePassword($user, 'password'.$i);
+            $password = $this->encoder->encodePassword($user, 'password' . $i);
 
             $user->setUsername($generator->userName)
                 ->setName($generator->lastName)
@@ -139,7 +147,7 @@ class AppFixtures extends Fixture
                 ->setCampus($campus)
                 ->setActive(true)
                 ->setAdmin(false);
-                $user->setPictureName('imageDefault.png');
+            $user->setPictureName('imageDefault.png');
             $manager->persist($user);
 
             $campus->addUser($user);
@@ -148,33 +156,31 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function fixActivities(ObjectManager $manager){
+    private function fixActivities(ObjectManager $manager)
+    {
         $generator = Factory::create('fr_FR');
         $campuses = $this->campusRepository->findAll();
         $states = $this->stateRepository->findAll();
         $users = $this->userRepository->findAll();
         $locations = $this->locationRepository->findAll();
-        for ($i = 0; $i < self::NB_ACTIVITIES; $i++){
-            $campus = $campuses[$generator->numberBetween(0, count($campuses)-1)];
-            $userOwner = $users[$generator->numberBetween(0, count($users)-1)];
-            $location = $locations[$generator->numberBetween(0, count($locations)-1)];
-            $startDate = $generator->dateTimeBetween('2020-09-01','2022-07-04');
-            $limitDate = $generator->dateTimeBetween('2020-09-01', $startDate);
+        for ($i = 0; $i < self::NB_ACTIVITIES; $i++) {
+            $campus = $campuses[$generator->numberBetween(0, count($campuses) - 1)];
+            $userOwner = $users[$generator->numberBetween(0, count($users) - 1)];
+            $location = $locations[$generator->numberBetween(0, count($locations) - 1)];
+            $startDate = $generator->dateTimeBetween('2021-03-01', '2022-07-04');
+            $limitDate = $generator->dateTimeBetween('2021-03-01', $startDate);
             $activity = new Activity();
-            $state = $states[$generator->numberBetween(0, count($states)-1)];
-            $activity->setName('Sortie n°'.$i)
+            $activity->setName('Sortie n°' . $i)
                 ->setStartDateTime($startDate)
-                ->setDuration($generator->numberBetween(1, 12))
+                ->setDuration($generator->numberBetween(30, 1339))
                 ->setInscriptionLimitDate($limitDate)
                 ->setActivityInfo($generator->realText(120))
                 ->setMaxInscriptionsNb($generator->numberBetween(1, 30))
                 ->setCampus($campus)
                 ->setUserOwner($userOwner)
-                ->setState($state)
                 ->setLocation($location);
-//            for ($j = 0; $j < $generator->numberBetween(0, 30); $j++){
-//                $activity->addUser($users[$generator->numberBetween(0, count($users))]);
-//            }
+            $state = $this->stateManagement->setTheState($activity, 'fixtures', $states);
+            $activity->setState($state);
             $manager->persist($activity);
             $userOwner->addActivitiesOwned($activity);
             $manager->persist($userOwner);
@@ -194,11 +200,11 @@ class AppFixtures extends Fixture
         $activities = $this->activityRepository->findAll();
         $users = $this->userRepository->findAll();
 
-        for ($i = 0; $i < count($activities); $i++){
+        for ($i = 0; $i < count($activities); $i++) {
             $activity = $activities[$i];
             $endLoop = $activity->getMaxInscriptionsNb() - $generator->numberBetween(0, $activity->getMaxInscriptionsNb());
             for ($j = 0; $j < $endLoop; $j++) {
-                $user = $users[$generator->numberBetween(0, count($users)-1)];
+                $user = $users[$generator->numberBetween(0, count($users) - 1)];
                 $activity->addUser($user);
                 $user->addActivity($activity);
                 $manager->persist($user);
@@ -208,7 +214,8 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function fixTestUser(ObjectManager $manager){
+    private function fixTestUser(ObjectManager $manager)
+    {
         $campus = $this->campusRepository->findOneBy(['name' => 'Chartres de Bretagne']);
         $martin = new User();
         $passwordMartin = $this->encoder->encodePassword($martin, 'martin');
@@ -222,7 +229,7 @@ class AppFixtures extends Fixture
             ->setCampus($campus)
             ->setActive(true)
             ->setAdmin(false);
-            $martin->setPictureName('imageDefault.png');
+        $martin->setPictureName('imageDefault.png');
         $antoine = new User();
         $passwordAntoine = $this->encoder->encodePassword($martin, 'password');
         $antoine->setUsername('antoine')
@@ -243,5 +250,4 @@ class AppFixtures extends Fixture
         $manager->persist($campus);
         $manager->flush();
     }
-
 }
