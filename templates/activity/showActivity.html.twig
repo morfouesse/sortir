@@ -7,6 +7,13 @@
 {% block body %}
     <main>
         <div class="column is-half">
+            {# Affichage des messages flash #}
+            {% for message in app.flashes('notice') %}
+                <div class="notification is-primary" id="notification">
+                    <button class="delete"></button>
+                    {{ message }}
+                </div>
+            {% endfor %}
             <div class="box">
                 <h1 class="title has-text-centered">{{ activity.name }}</h1>
                 <div class="columns">

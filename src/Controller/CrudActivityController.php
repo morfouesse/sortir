@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CrudActivityController extends AbstractController
 {
-    #[Route('/crud/activity', name: 'crudActivity')]
-    public function index(ActivityAsAUser $cu,
+    #[Route('/crud/createActivity', name: 'createActivity')]
+    public function createActivity(ActivityAsAUser $cu,
         Request $r, LocationRepository $lr): Response
     {
 
@@ -46,6 +46,35 @@ class CrudActivityController extends AbstractController
         return $this->render('crudActivity/index.html.twig', [
             'form' => $form->createView(),
             'locations' => $locations,
+
+        ]);
+    }
+
+    #[Route('/crud/modifyActivity/{id}', name: 'modifyActivity', requirements: ['id' => '\d+'])]
+    public function modifyActivity(EntityManagerInterface $em,
+        Request $r, ActivityRepository $ar, $id): Response
+    {
+
+        $activity = $ar->find($id);
+        $form = $this->createForm(CrudActivityType::class, $activity);
+        $form->handleRequest($r);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $em->persist($activity);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Sortie modifié avec succès !'
+            );
+            return $this->redirectToRoute('activity_showActivity', [
+                'id' => $id
+            ]);
+        }
+
+        return $this->render('crudActivity/modifyActivity.html.twig', [
+            'form' => $form->createView(),
 
         ]);
     }

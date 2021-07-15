@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} | Crée une sortie{% endblock %}
+{% block title %}
+    {{ parent() }} | modifier une sortie
+{% endblock %}
 
 {% block body %}
     <main>
@@ -8,7 +10,7 @@
             <div class="column">
                 <div class="py-6" style="width: 400px;">
                     <div class="box">
-                        <h1 class="title has-text-centered">Créer une sortie</h1>
+                        <h1 class="title has-text-centered">Modifier une sortie</h1>
                         <div class="pt-3">
                             {{ form_start(form, { 'attr': {'id': 'filter2'}}) }}
 
@@ -74,7 +76,7 @@
                                     {{ form_errors(form.inscriptionLimitDate) }}
                                 </div>
                             </div>
-{#                            <button type="submit" class="button">Publier la sortie</button>#}
+                            {#                            <button type="submit" class="button">Publier la sortie</button>#}
                             {{ form_end(form) }}
                             <div class="field is-horizontal">
                                 <a href="{{ path('main_index') }}" class="button is-link is-outlined">Annuler</a>
@@ -86,3 +88,4 @@
         </div>
     </main>
 {% endblock %}
+

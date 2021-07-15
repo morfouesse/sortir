@@ -70,8 +70,10 @@ class ActivityRepository extends ServiceEntityRepository
             ->createQueryBuilder('a')
             ->select('a,c,u,uO')
             ->join('a.campus', 'c')
-            ->join('a.userOwner', 'uO')
-            ->join('a.users', 'u');
+            ->leftJoin('a.users', 'u')
+            ->leftJoin('a.userOwner', 'uO');
+
+
 
         if (!empty($data->q)) {
             $query = $query
@@ -99,18 +101,26 @@ class ActivityRepository extends ServiceEntityRepository
 
         if(!empty(($data->userOwnActivities))){
             $query = $query
-                ->andWhere('a.userOwner =:userOwnActivities')
+                ->andWhere('uO =:userOwnActivities')
                 ->setParameter('userOwnActivities', $this->security->getUser());
 
         }
 
-        if(!empty(($data->usersActivities))){
+        if(!empty(($data->usersActivities)) && !empty(($data->userNotActivities))){
+            $query = $query
+                ->andWhere('u =:usersActivities')
+                ->andWhere('u !=:userNotActivities')
+                ->setParameter('usersActivities', $this->security->getUser())
+                ->setParameter('userNotActivities', $this->security->getUser());
+        }
+
+        else if(!empty(($data->usersActivities))){
             $query = $query
                 ->andWhere('u =:usersActivities')
                 ->setParameter('usersActivities', $this->security->getUser());
         }
 
-        if(!empty(($data->userNotActivities))){
+        else if(!empty(($data->userNotActivities))){
             $query = $query
                 ->andWhere('u !=:userNotActivities')
                 ->setParameter('userNotActivities', $this->security->getUser());

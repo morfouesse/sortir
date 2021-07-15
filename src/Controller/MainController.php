@@ -21,16 +21,17 @@ class MainController extends AbstractController
     {
         $data = new SearchData();
 
-
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($r);
+
         $activities = $ar->findSearch($data);
-//        foreach ($activities as $activity){
-//            $activity->setState($sm->setTheState($activity));
-//            $em->persist($activity);
-//            $em->refresh($activity);
-//        }
-//        $em->flush();
+     /*   foreach ($activities as $activity){
+            $activity->setState($sm->setTheState($activity));
+            $em->persist($activity);
+            $em->refresh($activity);
+        }
+        $em->flush();*/
+
 
         return $this->render('main/index.html.twig',
         [
