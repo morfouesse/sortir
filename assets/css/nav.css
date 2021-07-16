@@ -9,11 +9,11 @@
 }
 
 .panel{
-    background-color: #f5f4f1;
+    background-color: #ffffff;
 }
 
 .panel-heading{
-    background-color: #f1ebd3;
+    background-color: rgba(255, 255, 255, 0.85);
 }
 
 .link {

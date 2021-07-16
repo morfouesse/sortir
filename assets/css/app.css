@@ -40,22 +40,22 @@ main{
 .card:hover {
     transform: scale(1.04);
     border-radius: 10px;
-    border: 12px solid rgb(232, 192, 194);
+    border: 12px solid rgb(238, 168, 199);
 }
 
 .card-footer-item, .link{
     /*transition: 2ms ease-in, 2s ease-out;*/
     color: rgba(219,21,99,0.8);
     font-size: medium;
-    border-color: #eee0a9;
+    border-color: rgb(238, 168, 199);
 }
 
 .card-footer-item:hover {
     transition: 0.1s ease-in;
     color: rgba(74, 49, 163, 0.8);
-    background-color: #f1eddc;
+    background-color: rgb(245, 198, 219);
     font-weight: bold;
-    border: 2px solid #efe5be;
+    border: 2px solid rgb(238, 168, 199);
 }
 
 .link:hover {
@@ -63,9 +63,9 @@ main{
 }
 
 .card {
-    background-color: #f5f4f1;
+    background-color: #ffffff;
 }
 
 .navbar, .footer{
-    background-color: #f5f2ec;
+    background-color: #ffffff;
 }
