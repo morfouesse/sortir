@@ -26,17 +26,21 @@ class stateManagement
 
     public function setTheState(Activity $activity, string $stateToSet = '', array $states = []): State
     {
-//        dd($this->canSignIn($activity));
+        $state = $activity->getState();
 
         if ($states == null) {
             $states = $this->states;
         }
-        $state = $states[0];
+
+        if ($stateToSet == 'created') {
+            $state = $states[0];
+        }
+
        if ($stateToSet == 'open') {
-            $state = $states[1];
+           $state = $states[1];
         } else {
 
-            if ($activity->getState() == $states[1] || $activity->getState() == $states[2] || $activity->getState() == null) {
+            if ($activity->getState() == $states[1] || $activity->getState() == $states[2]) {
                 if ($this->activityOnGoing($activity)) {
                     $state = $states[3];
                 } else if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {

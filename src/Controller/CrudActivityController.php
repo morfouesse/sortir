@@ -88,7 +88,7 @@ class CrudActivityController extends AbstractController
     {
 
         $activity = $activityRepository->find($id);
-        $stateManagement->setTheState($activity, 'open');
+        $activity->setState($stateManagement->setTheState($activity, 'open'));
         $entityManager->persist($activity);
         $entityManager->flush();
 
