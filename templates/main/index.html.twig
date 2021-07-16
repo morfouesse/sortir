@@ -77,6 +77,7 @@
                 {% if item.state.label != 'Archivée' %}
                 {% if not (item.state.label == 'Créée' and app.user != item.userOwner) %}
                 {% if activities|length == 1 %}
+{#                Bug sur la fermeture de div #}
                 <div class="column mt-5 is-full is-full-tablet">
                     {% elseif activities|length == 2 %}
                     <div class="column mt-5 is-half is-full-tablet">
