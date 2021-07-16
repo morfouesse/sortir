@@ -108,7 +108,7 @@
                 </div>
 
                 <div class="columns is-variable is-0-mobile is-0-tablet is-3desktop has-text-centered">
-                    {% if activity.state.label == 'open' %}
+                    {% if activity.state.label == 'Ouverte' %}
                         {% if app.user in activity.users %}
                             <div class="column">
                                 <a class="button is-link is-outlined"
@@ -138,7 +138,7 @@
                                 Annuler
                             </a>
                         </div>
-                        {% if activity.state.label == 'created' %}
+                        {% if activity.state.label == 'Créée' %}
                             <div class="column">
                                 <a class="button is-link is-outlined"
                                    href="{{ path('crud_publish', {'id': activity.id}) }}">

@@ -34,8 +34,8 @@ class AppFixtures extends Fixture
 
     private const NB_CITIES = 20;
     private const NB_LOCATIONS = 30;
-    private const NB_USERS = 50;
-    private const NB_ACTIVITIES = 50;
+    private const NB_USERS = 150;
+    private const NB_ACTIVITIES = 300;
 
 
     public function __construct(UserPasswordEncoderInterface $encoder, CampusRepository $campusRepository,

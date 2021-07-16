@@ -32,7 +32,6 @@ class MainController extends AbstractController
         }
         $em->flush();*/
 
-
         return $this->render('main/index.html.twig',
         [
             'activities' => $activities,

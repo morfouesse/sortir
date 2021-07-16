@@ -21,14 +21,7 @@ class stateManagement
             $this->states[] = $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[$i]]);
         }
 
-//        $this->states = ['created' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[0]]),
-//            'open' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[1]]),
-//            'closed' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[2]]),
-//            'onGoing' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[3]]),
-//            'past' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[4]]),
-//            'canceled' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[5]]),
-//            'archived' => $this->stateRepository->findOneBy(['label' => STATE::TAB_LABEL[6]]),
-//        ];
+
     }
 
     public function setTheState(Activity $activity, string $stateToSet = '', array $states = []): State
@@ -91,7 +84,7 @@ class stateManagement
     public
     function stateIsOpen(Activity $activity): bool
     {
-        return $activity->getState()->getLabel() === 'open';
+        return $activity->getState()->getLabel() === 'Ouverte';
     }
 
     public
