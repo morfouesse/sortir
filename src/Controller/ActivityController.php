@@ -32,19 +32,18 @@ class ActivityController extends AbstractController
                            stateManagement $valid
     ): Response
     {
-        $userId = $this->getUser()->getId();
-        $user = $userRepository->find($userId);
-
         $activity = $activityRepository->find($id);
 
 
         if ($valid->canSignIn($activity)) {
-            $activity->addUser($user);
-            $user->addActivity($activity);
+            $activity->addUser($this->getUser());
+            $this->getUser()->addActivity($activity);
 
-            $manager->persist($user);
+            $manager->persist($this->getUser());
             $manager->persist($activity);
             $manager->flush();
+
+            $manager->refresh($this->getUser());
 
             $this->addFlash('notice', 'Vous êtes inscrit');
 
@@ -58,19 +57,18 @@ class ActivityController extends AbstractController
     public function signOut(int $id, ActivityRepository $activityRepository,
                             UserRepository $userRepository, EntityManagerInterface $manager): Response
     {
-        $userId = $this->getUser()->getId();
-        $user = $userRepository->find($userId);
-
         $activity = $activityRepository->find($id);
         if (!$activity) {
             throw $this->createNotFoundException('Cette sortie n\'existe pas');
         }
-        $activity->removeUser($user);
-        $user->removeActivity($activity);
+        $activity->removeUser($this->getUser());
+        $this->getUser()->removeActivity($activity);
 
-        $manager->persist($user);
+        $manager->persist($this->getUser());
         $manager->persist($activity);
         $manager->flush();
+
+        $manager->refresh($this->getUser());
 
         $this->addFlash('notice', 'Vous êtes désinscrit');
         return $this->render('activity/showActivity.html.twig', [
