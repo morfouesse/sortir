@@ -32,42 +32,46 @@ class stateManagement
             $states = $this->states;
         }
 
+        if ($stateToSet == 'fixtures') {
+            $state = $states[1];
+            $activity->setState($state);
+        }
+
         if ($stateToSet == 'created') {
             $state = $states[0];
         }
 
-       if ($stateToSet == 'open') {
-           $state = $states[1];
-        } else {
+        if ($stateToSet == 'open') {
+            $state = $states[1];
+        }
 
-            if ($activity->getState() == $states[1] || $activity->getState() == $states[2]) {
-                if ($this->activityOnGoing($activity)) {
-                    $state = $states[3];
-                } else if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {
-                    $state = $states[1];
-                } else {
-                    $state = $states[2];
-                }
-                if ($stateToSet == 'fixtures') {
-                    $rd3 = random_int(0, 100);
-                    if ($rd3 < 15) {
-                        $state = $states[5];
-                    }
+        if ($state == $states[1] || $state == $states[2]) {
+            if ($this->activityOnGoing($activity)) {
+                $state = $states[3];
+            } else if ($this->activityIsNotFull($activity) && $this->limitDateNotPassed($activity)) {
+                $state = $states[1];
+            } else {
+                $state = $states[2];
+            }
+            if ($stateToSet == 'fixtures') {
+                $rd1 = random_int(0, 100);
+                if ($rd1 < 15) {
+                    $state = $states[5];
                 }
             }
-            if ($this->activityPast($activity)) {
-                $state = $states[4];
-                if ($stateToSet == 'fixtures') {
-                    $rd2 = random_int(0, 100);
-                    if ($rd2 < 15) {
-                        $state = $states[5];
-                    }
+        }
+        if ($this->activityPast($activity)) {
+            $state = $states[4];
+            if ($stateToSet == 'fixtures') {
+                $rd2 = random_int(0, 100);
+                if ($rd2 < 15) {
+                    $state = $states[5];
                 }
             }
-            if ($activity->getState() == $states[5] || $activity->getState() == $states[4]) {
-                if ($this->activityArchieved($activity)) {
-                    $state = $states[6];
-                }
+        }
+        if ($state == $states[5] || $state == $states[4]) {
+            if ($this->activityArchieved($activity)) {
+                $state = $states[6];
             }
         }
         return $state;
